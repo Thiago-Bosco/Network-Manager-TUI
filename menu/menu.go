@@ -82,10 +82,16 @@ func createMainMenu(app *tview.Application) *tview.Flex {
         list.SetSelectedTextColor(tcell.ColorBlack)
         list.SetSelectedBackgroundColor(tcell.ColorDodgerBlue)
 
-        // Cria um layout que ocupa toda a tela
+        // Cria um layout com o menu centralizado na tela
         mainFlex := tview.NewFlex().
                 SetDirection(tview.FlexRow).
-                AddItem(list, 0, 1, true) // Lista ocupa todo o espaço disponível
+                AddItem(nil, 0, 1, false). // Espaço em branco superior
+                AddItem(tview.NewFlex().
+                        AddItem(nil, 0, 1, false). // Espaço em branco à esquerda
+                        AddItem(list, 60, 1, true). // Lista centralizada com largura fixa (mais larga que antes)
+                        AddItem(nil, 0, 1, false), // Espaço em branco à direita
+                        15, 1, true). // Altura do menu (maior que antes)
+                AddItem(nil, 0, 1, false) // Espaço em branco inferior
         
         // Definindo o fundo preto para o layout principal
         mainFlex.SetBackgroundColor(tcell.ColorBlack)
