@@ -357,13 +357,11 @@ func createConnectionFile(conn Connection) error {
 
 // activateConnectionManual activates a connection manually
 func activateConnectionManual(name string) error {
-	// Get connection details
 	conn, err := getConnectionByName(name)
 	if err != nil {
 		return err
 	}
 	
-	// For Ethernet connections, we need to set the IP on an interface
 	if conn.Type == "ethernet" {
 		// Find first ethernet interface
 		ifaces, err := GetInterfaces()
