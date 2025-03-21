@@ -1,3 +1,4 @@
+
 package ui
 
 import (
@@ -6,17 +7,10 @@ import (
 
 // Colors for the application
 var (
-	ColorPrimary   = lipgloss.Color("#5E81AC")
-	ColorSecondary = lipgloss.Color("#81A1C1")
-	ColorAccent    = lipgloss.Color("#88C0D0")
-	ColorSuccess   = lipgloss.Color("#A3BE8C")
-	ColorWarning   = lipgloss.Color("#EBCB8B")
-	ColorError     = lipgloss.Color("#BF616A")
-	ColorText      = lipgloss.Color("#ECEFF4")
-	ColorSubtle    = lipgloss.Color("#D8DEE9")
-	ColorBorder    = lipgloss.Color("#4C566A")
-	ColorDim       = lipgloss.Color("#3B4252")
-	ColorBg        = lipgloss.Color("#2E3440")
+	ColorBackground = lipgloss.Color("#0D131E")  // Dark blue background
+	ColorPrimary   = lipgloss.Color("#17A649")  // Green
+	ColorSecondary = lipgloss.Color("#101827")  // Detail blue
+	ColorText      = lipgloss.Color("#FFFFFF")  // White
 )
 
 // Common styles
@@ -25,7 +19,7 @@ var (
 	BaseStyle = lipgloss.NewStyle().
 		Padding(0, 1).
 		Foreground(ColorText).
-		Background(ColorBg)
+		Background(ColorBackground)
 
 	// Title styles
 	TitleStyle = lipgloss.NewStyle().
@@ -44,14 +38,14 @@ var (
 	// Footer styles
 	FooterStyle = lipgloss.NewStyle().
 		Foreground(ColorText).
-		Background(ColorDim).
+		Background(ColorSecondary).
 		PaddingLeft(2).
 		PaddingRight(2)
 
 	// Box styles
 	BoxStyle = lipgloss.NewStyle().
 		Border(lipgloss.RoundedBorder()).
-		BorderForeground(ColorBorder).
+		BorderForeground(ColorSecondary).
 		Padding(1, 2)
 
 	// Active/Selected item styles
@@ -74,19 +68,19 @@ var (
 	// Input field styles
 	InputFieldStyle = lipgloss.NewStyle().
 		Border(lipgloss.RoundedBorder()).
-		BorderForeground(ColorBorder).
+		BorderForeground(ColorSecondary).
 		Padding(0, 1)
 
 	// Status styles
 	StatusActiveStyle = lipgloss.NewStyle().
-		Foreground(ColorSuccess).
+		Foreground(ColorPrimary).
 		Bold(true)
 
 	StatusInactiveStyle = lipgloss.NewStyle().
-		Foreground(ColorError).
+		Foreground(ColorText).
 		Bold(true)
 
 	// Help styles
 	HelpStyle = lipgloss.NewStyle().
-		Foreground(ColorSubtle)
+		Foreground(ColorSecondary)
 )
