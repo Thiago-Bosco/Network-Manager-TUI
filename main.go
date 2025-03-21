@@ -2,11 +2,13 @@ package main
 
 import (
         "fmt"
+        "os"
         "time"
 
         "github.com/gdamore/tcell/v2"
         "github.com/rivo/tview"
         
+        "networkmanager-tui/i18n"
         "networkmanager-tui/menu"
 )
 
@@ -39,13 +41,12 @@ func animateTitle(app *tview.Application, title string) {
 }
 
 func main() {
-        // Check root privileges (desabilitado temporariamente para desenvolvimento)
-        // if os.Geteuid() != 0 {
-        //      fmt.Println("Este aplicativo precisa de privilégios root para configurar interfaces de rede.")
-        //      fmt.Println("Por favor, execute com sudo ou como usuário root.")
-        //      os.Exit(1)
-        // }
-        fmt.Println("Modo de desenvolvimento - verificação de privilégios root desabilitada temporariamente.")
+        // Check root privileges
+        if os.Geteuid() != 0 {
+                fmt.Println(i18n.T("error_root_required"))
+                fmt.Println("Por favor, execute com sudo ou como usuário root.")
+                os.Exit(1)
+        }
 
         // Cria uma nova aplicação tview
         app := tview.NewApplication()

@@ -224,7 +224,12 @@ func ConfigureNetwork(app *tview.Application) *tview.Form {
         })
         
         form.AddButton(i18n.T("network_cancel"), func() {
-                app.Stop()
+                // Retorna ao menu principal usando uma função externa que deve ser importada do pacote menu
+                // Como é uma demo, vamos apenas voltar para uma tela vazia
+                emptyPage := tview.NewPages()
+                text := tview.NewTextView().SetText(i18n.T("returned_to_main"))
+                emptyPage.AddPage("main", text, true, true)
+                app.SetRoot(emptyPage, true)
         })
 
         return form
