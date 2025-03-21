@@ -47,11 +47,18 @@ func main() {
         flag.Parse()
 
         // Check root privileges unless in development mode
-        if !*devMode && os.Geteuid() != 0 {
-                fmt.Println(i18n.T("error_root_required"))
-                fmt.Println("Por favor, execute com sudo ou como usuário root.")
-                fmt.Println("Ou use a flag -dev para testes em desenvolvimento: go run main.go -dev")
-                os.Exit(1)
+        if !*devMode {
+                if os.Geteuid() != 0 {
+                        fmt.Println(i18n.T("error_root_required"))
+                        fmt.Println("Por favor, execute com sudo ou como usuário root.")
+                        fmt.Println("Ou use a flag -dev para testes em desenvolvimento: go run main.go -dev")
+                        os.Exit(1)
+                }
+                // Verificação adicional de permissões
+                if _, err := os.Stat("/etc/network"); os.IsPermission(err) {
+                        fmt.Println("Erro: Sem permissão para acessar configurações de rede")
+                        os.Exit(1)
+                }
         }
 
         // Aviso se estiver em modo de desenvolvimento

@@ -12,6 +12,23 @@ import (
 )
 
 // Definição de cores utilizadas na interface - Paleta melhorada
+
+// Timeout para comandos (5 segundos)
+const commandTimeout = 5 * time.Second
+
+// Executa comando com timeout
+func runCommandWithTimeout(name string, args ...string) ([]byte, error) {
+        ctx, cancel := context.WithTimeout(context.Background(), commandTimeout)
+        defer cancel()
+        
+        cmd := exec.CommandContext(ctx, name, args...)
+        out, err := cmd.Output()
+        if ctx.Err() == context.DeadlineExceeded {
+                return nil, fmt.Errorf("timeout ao executar comando %s", name)
+        }
+        return out, err
+}
+
 var (
         borderColor      = tcell.ColorDeepSkyBlue     // Cor da borda
         backgroundColor  = tcell.ColorBlack           // Cor de fundo da interface
@@ -98,7 +115,13 @@ func GetNetworkConnections() ([]string, error) {
         cmd := exec.Command("nmcli", "device", "status")
         out, err := cmd.Output()
         if err != nil {
+                if exitErr, ok := err.(*exec.ExitError); ok {
+                        return nil, fmt.Errorf("erro ao executar nmcli (código %d): %s", exitErr.ExitCode(), string(exitErr.Stderr))
+                }
                 return nil, fmt.Errorf("erro ao obter conexões de rede: %w", err)
+        }
+        if len(out) == 0 {
+                return nil, fmt.Errorf("nenhuma saída do comando nmcli")
         }
 
         // Processa a saída do comando, extraindo os nomes das interfaces de rede
