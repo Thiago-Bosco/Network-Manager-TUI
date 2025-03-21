@@ -39,51 +39,51 @@ func StartMenu(app *tview.Application) {
 
 // Cria o menu principal
 func createMainMenu(app *tview.Application) *tview.Flex {
-        // Lista com as opções do menu
+        // Lista com as opções do menu com tradução das descrições
         list := tview.NewList().
-                AddItem("🔌 "+i18n.T("menu_configure"), "Configure network interfaces", '1', func() {
+                AddItem("🔌 "+i18n.T("menu_configure"), i18n.T("menu_desc_configure"), '1', func() {
                         configureNetworkMenu(app)
                 }).
-                AddItem("📡 "+i18n.T("menu_status"), "Show network connections status", '2', func() {
+                AddItem("📡 "+i18n.T("menu_status"), i18n.T("menu_desc_status"), '2', func() {
                         showNetworkStatus(app)
                 }).
-                AddItem("📶 "+i18n.T("menu_ping_test"), "Test network connectivity", '3', func() {
+                AddItem("📶 "+i18n.T("menu_ping_test"), i18n.T("menu_desc_ping"), '3', func() {
                         showPingTest(app)
                 }).
-                AddItem("📊 "+i18n.T("menu_sysinfo"), "Display system information", '4', func() {
+                AddItem("📊 "+i18n.T("menu_sysinfo"), i18n.T("menu_desc_sysinfo"), '4', func() {
                         showSystemInfo(app)
                 }).
-                AddItem("ℹ️ "+i18n.T("menu_help"), "Show help information", '5', func() {
+                AddItem("ℹ️ "+i18n.T("menu_help"), i18n.T("menu_desc_help"), '5', func() {
                         showHelp(app)
                 }).
-                AddItem("🔄 "+i18n.T("menu_reboot"), "Reboot the system", '6', func() {
+                AddItem("🔄 "+i18n.T("menu_reboot"), i18n.T("menu_desc_reboot"), '6', func() {
                         confirmAndExecute(app, i18n.T("reboot_title"), i18n.T("reboot_message"), rebootSystem)
                 }).
-                AddItem("⏻ "+i18n.T("menu_shutdown"), "Shutdown the system", '7', func() {
+                AddItem("⏻ "+i18n.T("menu_shutdown"), i18n.T("menu_desc_shutdown"), '7', func() {
                         confirmAndExecute(app, i18n.T("shutdown_title"), i18n.T("shutdown_message"), shutdownSystem)
                 }).
-                AddItem("🌐 "+i18n.T("menu_language"), "Change language", '8', func() {
+                AddItem("🌐 "+i18n.T("menu_language"), i18n.T("menu_desc_language"), '8', func() {
                         changeLanguage(app)
                 }).
-                AddItem("❌ "+i18n.T("menu_exit"), "Exit the application", '9', func() {
+                AddItem("❌ "+i18n.T("menu_exit"), i18n.T("menu_desc_exit"), '9', func() {
                         app.Stop()
                 })
 
-        // Estiliza a lista
+        // Estiliza a lista com visual profissional
         list.SetBorder(true).
                 SetTitle(" 🖥️ "+i18n.T("menu_title")+" 🖥️ ").
                 SetTitleAlign(tview.AlignCenter).
-                SetBorderColor(borderColor).
-                SetBackgroundColor(backgroundColor)
+                SetBorderColor(tcell.ColorDeepSkyBlue).
+                SetBackgroundColor(tcell.ColorBlack)
         
-        // Configura as cores do texto
-        list.SetMainTextColor(primaryTextColor)
-        list.SetSecondaryTextColor(secondaryColor)
-        list.SetSelectedTextColor(backgroundColor)
-        list.SetSelectedBackgroundColor(accentColor)
+        // Configura as cores do texto para um visual mais profissional
+        list.SetMainTextColor(tcell.ColorLightCyan)
+        list.SetSecondaryTextColor(tcell.ColorLightBlue)
+        list.SetSelectedTextColor(tcell.ColorBlack)
+        list.SetSelectedBackgroundColor(tcell.ColorDodgerBlue)
 
         // Cria um layout flexível para centralizar o menu
-        flex := tview.NewFlex().
+        mainFlex := tview.NewFlex().
                 SetDirection(tview.FlexRow).
                 AddItem(nil, 0, 1, false). // Espaço em branco superior
                 AddItem(tview.NewFlex().
@@ -92,8 +92,11 @@ func createMainMenu(app *tview.Application) *tview.Flex {
                         AddItem(nil, 0, 1, false), // Espaço em branco à direita
                         10, 1, true). // Altura do menu
                 AddItem(nil, 0, 1, false) // Espaço em branco inferior
+        
+        // Definindo o fundo preto para o layout principal
+        mainFlex.SetBackgroundColor(tcell.ColorBlack)
 
-        return flex
+        return mainFlex
 }
 
 // Abre a tela de configuração de rede

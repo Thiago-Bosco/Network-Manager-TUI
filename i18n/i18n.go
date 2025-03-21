@@ -23,6 +23,16 @@ var translations = map[string]map[string]string{
                 "menu_language":     "Change Language",
                 "menu_help":         "Help",
                 
+                "menu_desc_configure": "Configure network interfaces",
+                "menu_desc_status":    "Show network connections status",
+                "menu_desc_ping":      "Test network connectivity",
+                "menu_desc_sysinfo":   "Display system information",
+                "menu_desc_help":      "Show help information",
+                "menu_desc_reboot":    "Reboot the system",
+                "menu_desc_shutdown":  "Shutdown the system",
+                "menu_desc_language":  "Change language",
+                "menu_desc_exit":      "Exit the application",
+                
                 "network_title":     "Configure Network",
                 "network_status":    "Network Status",
                 "network_interface": "Network Interface (e.g., eth0):",
@@ -102,6 +112,16 @@ var translations = map[string]map[string]string{
                 "menu_exit":         "Sair",
                 "menu_language":     "Mudar Idioma",
                 "menu_help":         "Ajuda",
+                
+                "menu_desc_configure": "Configurar interfaces de rede",
+                "menu_desc_status":    "Mostrar status das conexões de rede",
+                "menu_desc_ping":      "Testar conectividade da rede",
+                "menu_desc_sysinfo":   "Exibir informações do sistema",
+                "menu_desc_help":      "Mostrar informações de ajuda",
+                "menu_desc_reboot":    "Reiniciar o sistema",
+                "menu_desc_shutdown":  "Desligar o sistema",
+                "menu_desc_language":  "Mudar o idioma",
+                "menu_desc_exit":      "Sair da aplicação",
                 
                 "network_title":     "Configurar Rede",
                 "network_status":    "Status da Rede",
