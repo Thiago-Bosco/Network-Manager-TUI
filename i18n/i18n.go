@@ -81,7 +81,17 @@ var translations = map[string]map[string]string{
                 "shutdown_message":  "The system will now shut down!",
                 
                 "help_title":        "Help",
-                "help_description":  "This application allows you to configure and monitor network interfaces.\n\nUse arrow keys to navigate, Enter to select, and Esc to go back.",
+                "help_description":  "This application allows you to configure and monitor network interfaces.\n\n" +
+                "Navigation:\n" +
+                "• Arrow keys (↑/↓) - Navigate through menus\n" +
+                "• Enter - Select/Confirm option\n" +
+                "• Esc - Return to previous menu\n\n" +
+                "Main Features:\n" +
+                "• Configure Network - Set up network interfaces\n" +
+                "• Network Status - Monitor connections\n" +
+                "• Ping Test - Test network connectivity\n" +
+                "• System Information - View system details\n" +
+                "• Reboot/Shutdown - System power options\n",
                 
                 "success_title":     "Success",
                 "success_message":   "Network configuration applied successfully!",

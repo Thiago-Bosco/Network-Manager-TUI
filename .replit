@@ -30,4 +30,5 @@ task = "shell.exec"
 args = "go run main.go -dev"
 
 [deployment]
-run = ["sh", "-c", "go run main.go -dev"]
+run = ["sh", "-c", "./networkmanager-tui"]
+build = ["sh", "-c", "go build -o networkmanager-tui"]
