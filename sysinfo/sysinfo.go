@@ -47,7 +47,14 @@ func GetSystemInfo() string {
 
 	width := 65 // Total width for centering
 	centerText := func(text string) string {
-		padding := (width - len(stripColor(text))) / 2
+		textLen := len(stripColor(text))
+		if textLen >= width {
+			return text
+		}
+		padding := (width - textLen) / 2
+		if padding < 0 {
+			padding = 0
+		}
 		return strings.Repeat(" ", padding) + text
 	}
 
