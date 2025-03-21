@@ -1,0 +1,52 @@
+modules = ["golang"]
+
+[nix]
+channel = "stable-24_05"
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Golang Network Manager TUI"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "network-manager-tui"
+
+[[workflows.workflow]]
+name = "Golang Network Manager TUI"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "go run main.go"
+waitForPort = 5000
+
+[[workflows.workflow]]
+name = "network-manager-tui"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "go run main.go"
+
+[deployment]
+run = ["sh", "-c", "go run main.go"]
