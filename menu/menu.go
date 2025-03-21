@@ -4,6 +4,7 @@ import (
         "flag"
         "fmt"
         "os/exec"
+        "time"
 
         "github.com/gdamore/tcell/v2"
         "github.com/rivo/tview"
@@ -103,36 +104,76 @@ func configureNetworkMenu(app *tview.Application) {
 
 // Mostra as informações do sistema
 func showSystemInfo(app *tview.Application) {
-        output := sysinfo.GetSystemInfo()
+        // Criando uma visualização mais bonita com cores e formatação aprimorada
+        textView := tview.NewTextView()
+        textView.SetDynamicColors(true)
+        textView.SetRegions(true)
+        textView.SetWordWrap(true)
+        textView.SetTextAlign(tview.AlignLeft)
+        textView.SetBackgroundColor(tcell.ColorBlack)
+        textView.SetText(sysinfo.GetSystemInfo())
         
-        textView := tview.NewTextView().
-                SetText(output).
-                SetDynamicColors(true).
-                SetRegions(true).
-                SetWordWrap(true).
-                SetTextAlign(tview.AlignLeft)
+        // Aplicando uma borda bonita
+        textView.SetBorder(true)
+        textView.SetTitle(" 📊 "+i18n.T("sysinfo_title")+" 📊 ")
+        textView.SetTitleAlign(tview.AlignCenter)
+        textView.SetTitleColor(tcell.ColorYellow)
+        textView.SetBorderColor(tcell.ColorYellow)
         
-        textView.SetBorder(true).
-                SetTitle(" 📊 "+i18n.T("sysinfo_title")+" 📊 ").
-                SetTitleAlign(tview.AlignCenter).
-                SetBorderColor(borderColor)
+        // Botão para atualizar as informações
+        refreshButton := tview.NewButton(i18n.T("refresh"))
+        refreshButton.SetSelectedFunc(func() {
+                // Atualiza as informações
+                textView.SetText(sysinfo.GetSystemInfo())
+                app.Draw()
+        })
+        
+        refreshButton.SetBackgroundColor(tcell.ColorDarkGreen)
+        refreshButton.SetLabelColor(tcell.ColorWhite)
         
         // Botão para voltar ao menu principal
-        backButton := tview.NewButton("Back").
-                SetSelectedFunc(func() {
-                        app.SetRoot(createMainMenu(app), true)
-                })
+        backButton := tview.NewButton(i18n.T("back"))
+        backButton.SetSelectedFunc(func() {
+                app.SetRoot(createMainMenu(app), true)
+        })
         
         backButton.SetBackgroundColor(tcell.ColorRoyalBlue)
-        backButton.SetLabelColor(tcell.ColorBlack)
+        backButton.SetLabelColor(tcell.ColorWhite)
+        
+        // Criando um layout de botões
+        buttonFlex := tview.NewFlex()
+        buttonFlex.SetDirection(tview.FlexColumn)
+        buttonFlex.AddItem(nil, 0, 1, false)
+        buttonFlex.AddItem(refreshButton, 10, 0, true)
+        buttonFlex.AddItem(nil, 1, 0, false)
+        buttonFlex.AddItem(backButton, 10, 0, true)
+        buttonFlex.AddItem(nil, 0, 1, false)
         
         // Layout para a tela de informações do sistema
-        flex := tview.NewFlex().
-                SetDirection(tview.FlexRow).
-                AddItem(textView, 0, 1, true).
-                AddItem(backButton, 1, 0, false)
+        flex := tview.NewFlex()
+        flex.SetDirection(tview.FlexRow)
+        flex.AddItem(textView, 0, 1, true)
+        flex.AddItem(buttonFlex, 3, 0, false)
         
         app.SetRoot(flex, true)
+        
+        // Armazenando uma cópia para acesso na goroutine
+        tvp := textView
+        
+        // Configurando um timer para atualizar as informações automaticamente a cada 5 segundos
+        go func() {
+                ticker := time.NewTicker(5 * time.Second)
+                defer ticker.Stop()
+                
+                for {
+                        select {
+                        case <-ticker.C:
+                                app.QueueUpdateDraw(func() {
+                                        tvp.SetText(sysinfo.GetSystemInfo())
+                                })
+                        }
+                }
+        }()
 }
 
 // Reinicia o sistema

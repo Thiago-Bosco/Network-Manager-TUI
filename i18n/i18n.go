@@ -72,6 +72,9 @@ var translations = map[string]map[string]string{
                 "error_network_info": "Failed to get network information",
                 
                 "returned_to_main":  "Returned to main menu. Press Esc to exit.",
+                
+                "refresh":           "Refresh",
+                "back":              "Back",
         },
         "pt": {
                 "menu_title":        "Gerenciador de Rede TUI",
@@ -134,6 +137,9 @@ var translations = map[string]map[string]string{
                 "error_network_info": "Falha ao obter informações de rede",
                 
                 "returned_to_main":  "Retornou ao menu principal. Pressione Esc para sair.",
+                
+                "refresh":           "Atualizar",
+                "back":              "Voltar",
         },
 }
 
