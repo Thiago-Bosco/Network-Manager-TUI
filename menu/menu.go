@@ -149,11 +149,18 @@ func showSystemInfo(app *tview.Application) {
         buttonFlex.AddItem(backButton, 10, 0, true)
         buttonFlex.AddItem(nil, 0, 1, false)
         
+        // Adicionando texto de ajuda para mostrar a tecla Esc
+        helpText := tview.NewTextView()
+        helpText.SetTextAlign(tview.AlignCenter)
+        helpText.SetDynamicColors(true)
+        helpText.SetText("[yellow]" + i18n.T("press_esc_return") + "[white]")
+        
         // Layout para a tela de informações do sistema
         flex := tview.NewFlex()
         flex.SetDirection(tview.FlexRow)
         flex.AddItem(textView, 0, 1, true)
         flex.AddItem(buttonFlex, 3, 0, false)
+        flex.AddItem(helpText, 1, 0, false)
         
         app.SetRoot(flex, true)
         
@@ -367,11 +374,18 @@ func showPingTest(app *tview.Application) {
                 app.SetRoot(createMainMenu(app), true)
         })
         
+        // Adicionando texto de ajuda para mostrar a tecla Esc
+        helpText := tview.NewTextView()
+        helpText.SetTextAlign(tview.AlignCenter)
+        helpText.SetDynamicColors(true)
+        helpText.SetText("[yellow]" + i18n.T("press_esc_return") + "[white]")
+        
         // Layout principal
         flex := tview.NewFlex().
                 SetDirection(tview.FlexRow).
                 AddItem(form, 10, 0, true).
-                AddItem(resultsTextView, 0, 1, false)
+                AddItem(resultsTextView, 0, 1, false).
+                AddItem(helpText, 1, 0, false)
         
         app.SetRoot(flex, true)
 }
@@ -399,11 +413,18 @@ func showHelp(app *tview.Application) {
                 app.SetRoot(createMainMenu(app), true)
         })
         
+        // Adicionando texto de ajuda para mostrar a tecla Esc
+        helpText := tview.NewTextView()
+        helpText.SetTextAlign(tview.AlignCenter)
+        helpText.SetDynamicColors(true)
+        helpText.SetText("[yellow]" + i18n.T("press_esc_return") + "[white]")
+        
         // Layout principal
         flex := tview.NewFlex().
                 SetDirection(tview.FlexRow).
                 AddItem(textView, 0, 1, true).
-                AddItem(form, 3, 0, false)
+                AddItem(form, 3, 0, false).
+                AddItem(helpText, 1, 0, false)
         
         app.SetRoot(flex, true)
 }

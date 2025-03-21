@@ -65,6 +65,16 @@ func main() {
 
         // Aplica o tema personalizado
         setTheme(app)
+        
+        // Adiciona handler global para a tecla Esc retornar ao menu principal
+        app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+                // Se pressionar Esc, volta para o menu principal
+                if event.Key() == tcell.KeyEscape {
+                        menu.StartMenu(app)
+                        return nil
+                }
+                return event
+        })
 
         // Inicia o menu principal
         menu.StartMenu(app)

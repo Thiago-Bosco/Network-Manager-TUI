@@ -420,13 +420,20 @@ func ShowNetworkStatus(app *tview.Application) *tview.Flex {
                 app.SetRoot(ShowNetworkStatus(app), true)
         })
         
+        // Adicionando texto de ajuda para mostrar a tecla Esc
+        helpText := tview.NewTextView()
+        helpText.SetTextAlign(tview.AlignCenter)
+        helpText.SetDynamicColors(true)
+        helpText.SetText("[yellow]" + i18n.T("press_esc_return") + "[white]")
+        
         flex.AddItem(buttonsForm, 3, 0, false)
+        flex.AddItem(helpText, 1, 0, false)
         
         return flex
 }
 
 // Função que configura a rede a partir de uma interface TUI
-func ConfigureNetwork(app *tview.Application) *tview.Form {
+func ConfigureNetwork(app *tview.Application) *tview.Flex {
         // Cria o formulário de configuração de rede com um visual mais bonito
         form := tview.NewForm()
         form.SetBorder(true).
@@ -703,6 +710,18 @@ func ConfigureNetwork(app *tview.Application) *tview.Form {
                 // Encerra a aplicação - ela será reiniciada pelo workflow
                 app.Stop()
         })
-
-        return form
+        
+        // Adicionando texto de ajuda para mostrar a tecla Esc
+        helpText := tview.NewTextView()
+        helpText.SetTextAlign(tview.AlignCenter)
+        helpText.SetDynamicColors(true)
+        helpText.SetText("[yellow]" + i18n.T("press_esc_return") + "[white]")
+        
+        // Criando um flex para adicionar o texto de ajuda abaixo do formulário
+        flex := tview.NewFlex().
+                SetDirection(tview.FlexRow).
+                AddItem(form, 0, 1, true).
+                AddItem(helpText, 1, 0, false)
+        
+        return flex
 }
