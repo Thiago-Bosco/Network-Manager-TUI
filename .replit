@@ -29,6 +29,15 @@ task = "packager.installForAll"
 task = "shell.exec"
 args = "go run main.go -dev"
 
+[[workflows.workflow]]
+name = "Network Manager TUI (Production)"
+author = 40715511
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "sudo go run main.go"
+
 [deployment]
 run = ["sh", "-c", "./networkmanager-tui"]
 build = ["sh", "-c", "go build -o networkmanager-tui"]
