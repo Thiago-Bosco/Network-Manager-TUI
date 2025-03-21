@@ -1,12 +1,14 @@
 package network
 
 import (
+        "context"
         "fmt"
         "github.com/gdamore/tcell/v2"
         "github.com/rivo/tview"
         "os/exec"
         "regexp"
         "strings"
+        "time"
         "networkmanager-tui/i18n"
         "flag"
 )
