@@ -502,7 +502,7 @@ func ConfigureNetwork(app *tview.Application) *tview.Flex {
                 
                 // Precisamos adicionar primeiro os campos para depois obter referências e depois definir seus estados
                 if ipInput != nil {
-                    if ipv4Mode == 1 { // Manual
+                    if option == IPv4ModeManual { // Usando a string do modo ao invés do índice
                         // Mostra campos de configuração manual IPv4
                         ipInput.SetDisabled(false)
                         netmaskInput.SetDisabled(false)
