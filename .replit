@@ -36,7 +36,7 @@ mode = "sequential"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "sudo go run main.go"
+args = "go run main.go"
 
 [deployment]
 run = ["sh", "-c", "./networkmanager-tui"]
