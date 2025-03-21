@@ -1,4 +1,4 @@
-modules = ["golang"]
+modules = ["golang", "golang-1.19", "go-1.19"]
 
 [nix]
 channel = "stable-24_05"
@@ -13,29 +13,10 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Golang Network Manager TUI"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "network-manager-tui"
+args = "Network Manager TUI"
 
 [[workflows.workflow]]
-name = "Golang Network Manager TUI"
-author = "agent"
-
-[workflows.workflow.metadata]
-agentRequireRestartOnSave = false
-
-[[workflows.workflow.tasks]]
-task = "packager.installForAll"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "go run main.go"
-waitForPort = 5000
-
-[[workflows.workflow]]
-name = "network-manager-tui"
+name = "Network Manager TUI"
 author = "agent"
 
 [workflows.workflow.metadata]
