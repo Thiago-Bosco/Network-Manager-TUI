@@ -80,7 +80,7 @@ func createMainMenu(app *tview.Application) *tview.Flex {
         list.SetMainTextColor(tcell.ColorLightCyan)
         list.SetSecondaryTextColor(tcell.ColorLightBlue)
         list.SetSelectedTextColor(tcell.ColorBlack)
-        list.SetSelectedBackgroundColor(tcell.ColorDodgerBlue)
+        list.SetSelectedBackgroundColor(tcell.ColorWhite)
 
         // Cria um layout com o menu centralizado na tela
         mainFlex := tview.NewFlex().
