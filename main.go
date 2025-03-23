@@ -84,7 +84,7 @@ func main() {
         })
 
         // Inicia o menu principal
-        menu.StartMenu(app)
+        menu.IniciarMenu(app)
 
         // Inicia animação de título
         animateTitle(app, "Network Manager TUI")
