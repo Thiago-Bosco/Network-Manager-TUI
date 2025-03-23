@@ -3,36 +3,119 @@
 
 ```mermaid
 graph TD
-    A[main.go] --> B[menu/menu.go]
-    A --> C[i18n/i18n.go]
+    %% Componente Principal
+    A[main.go] --> B[Menu Principal]
+    A --> C[Sistema de Idiomas]
+    A --> D[Sistema de Logs]
     
-    B --> D[network/network.go]
-    B --> E[sysinfo/sysinfo.go]
+    %% Menu e Navegação
+    B --> E[Gerenciamento de Rede]
+    B --> F[Status do Sistema]
+    B --> G[Teste de Conexão]
+    B --> H[Informações]
+    B --> I[Ajuda]
+    B --> J[Reiniciar]
+    B --> K[Desligar]
     
-    D --> F[Configuração de Rede]
-    D --> G[Status da Rede]
-    D --> H[Teste de Ping]
+    %% Gerenciamento de Rede
+    E --> L[Configuração IPv4]
+    E --> M[Configuração IPv6]
+    E --> N[DHCP]
+    E --> O[DNS]
+    E --> P[Interfaces]
     
-    E --> I[Info do Sistema]
-    E --> J[Hardware]
-    E --> K[Recursos]
+    %% Status e Monitoramento
+    F --> Q[Status da Rede]
+    F --> R[Conexões Ativas]
+    F --> S[Interfaces de Rede]
+    
+    %% Segurança
+    T[Sistema de Segurança] --> U[Verificação Root]
+    T --> V[Validação de Entrada]
+    T --> W[Modo Desenvolvimento]
+    T --> X[Proteção Comandos]
+    
+    %% Logs e História
+    D --> Y[Logs do Sistema]
+    D --> Z[Histórico de Ações]
+    D --> AA[Limpeza Automática]
+    
+    %% Interface do Usuário
+    AB[Interface TUI] --> AC[Temas]
+    AB --> AD[Navegação]
+    AB --> AE[Feedback Visual]
+    AB --> AF[Atalhos]
 
-    subgraph Interface
-        B --> L[Menu Principal]
-        L --> M[Configurar Rede]
-        L --> N[Status da Rede]
-        L --> O[Teste de Ping]
-        L --> P[Info do Sistema]
-        L --> Q[Ajuda]
-        L --> R[Reiniciar]
-        L --> S[Desligar]
-        L --> T[Idioma]
+    %% Subgráfico de Componentes
+    subgraph Componentes_Principais
+        A
+        B
+        C
+        D
+        T
     end
 
-    subgraph Componentes
-        D --> U[IPv4]
-        D --> V[IPv6]
-        D --> W[DHCP]
-        D --> X[DNS]
+    %% Subgráfico de Interface
+    subgraph Interface_Usuario
+        AB
+        AC
+        AD
+        AE
+        AF
+    end
+
+    %% Subgráfico de Funcionalidades
+    subgraph Funcionalidades
+        E
+        F
+        G
+        H
     end
 ```
+
+## Descrição da Arquitetura
+
+### 1. Componentes Principais
+- **main.go**: Ponto de entrada da aplicação
+- **Menu Principal**: Interface central de navegação
+- **Sistema de Idiomas**: Suporte a múltiplos idiomas
+- **Sistema de Logs**: Registro de atividades
+- **Sistema de Segurança**: Proteção e validação
+
+### 2. Gerenciamento de Rede
+- Configuração completa de rede IPv4/IPv6
+- Suporte a DHCP e DNS
+- Gerenciamento de interfaces de rede
+- Monitoramento de conexões ativas
+
+### 3. Segurança
+- Verificação de privilégios root
+- Validação de entrada de dados
+- Modo de desenvolvimento seguro
+- Proteção contra comandos perigosos
+- Histórico de alterações
+
+### 4. Monitoramento
+- Status da rede em tempo real
+- Informações do sistema
+- Teste de conectividade
+- Monitoramento de recursos
+
+### 5. Interface do Usuário
+- Temas personalizados
+- Navegação intuitiva
+- Feedback visual
+- Atalhos de teclado
+- Suporte a múltiplos idiomas
+
+### 6. Sistema de Logs
+- Registro detalhado de ações
+- Histórico de modificações
+- Limpeza automática após 90 dias
+- Exportação de logs
+
+### 7. Recursos Adicionais
+- Reinicialização segura
+- Desligamento controlado
+- Sistema de ajuda integrado
+- Backup de configurações
