@@ -509,7 +509,7 @@ func ConfigureNetwork(app *tview.Application) *tview.Flex {
                         gatewayInput.SetDisabled(false)
                         dns1Input.SetDisabled(false)
                         dns2Input.SetDisabled(false)
-                    } else { // Auto/DHCP
+                    } else { // Auto/DHCP (IPv4ModeAuto)
                         // Desabilita campos de configuração manual IPv4
                         ipInput.SetDisabled(true)
                         netmaskInput.SetDisabled(true)
