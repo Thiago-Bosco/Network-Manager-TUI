@@ -131,35 +131,6 @@ func showSystemInfo(app *tview.Application) {
 	textView.SetTitleColor(tcell.ColorYellow)
 	textView.SetBorderColor(tcell.ColorYellow)
 
-	// Botão para atualizar as informações
-	refreshButton := tview.NewButton(i18n.T("refresh"))
-	refreshButton.SetSelectedFunc(func() {
-		// Atualiza as informações
-		textView.SetText(sysinfo.GetSystemInfo())
-		app.Draw()
-	})
-
-	refreshButton.SetBackgroundColor(tcell.ColorDarkGreen)
-	refreshButton.SetLabelColor(tcell.ColorWhite)
-
-	// Botão para voltar ao menu principal
-	backButton := tview.NewButton(i18n.T("back"))
-	backButton.SetSelectedFunc(func() {
-		app.SetRoot(createMainMenu(app), true)
-	})
-
-	backButton.SetBackgroundColor(tcell.ColorRoyalBlue)
-	backButton.SetLabelColor(tcell.ColorWhite)
-
-	// Criando um layout de botões
-	buttonFlex := tview.NewFlex()
-	buttonFlex.SetDirection(tview.FlexColumn)
-	buttonFlex.AddItem(nil, 0, 1, false)
-	buttonFlex.AddItem(refreshButton, 10, 0, true)
-	buttonFlex.AddItem(nil, 1, 0, false)
-	buttonFlex.AddItem(backButton, 10, 0, true)
-	buttonFlex.AddItem(nil, 0, 1, false)
-
 	// Adicionando texto de ajuda para mostrar a tecla Esc
 	helpText := tview.NewTextView()
 	helpText.SetTextAlign(tview.AlignCenter)
@@ -170,7 +141,6 @@ func showSystemInfo(app *tview.Application) {
 	flex := tview.NewFlex()
 	flex.SetDirection(tview.FlexRow)
 	flex.AddItem(textView, 0, 1, true)
-	flex.AddItem(buttonFlex, 3, 0, true)
 	flex.AddItem(helpText, 1, 0, false)
 
 	app.SetRoot(flex, true)
