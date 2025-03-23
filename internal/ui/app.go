@@ -252,13 +252,73 @@ func (a App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		cmds = append(cmds, newCmd)
 
 	case ActivateConnectionPage:
-		if key.Matches(msg, keys.Back) {
+		if key.Matches(msg, keys.Back) || key.Matches(msg, keys.Save) {
 			a.currentPage = MainMenuPage
 			a.mainMenu.ResetSelection()
 			return a, nil
 		}
 		newModel, newCmd := a.activateConnection.Update(msg)
+		if newModel.IsSaved() || newModel.IsCompleted() {
+			a.currentPage = MainMenuPage
+			a.mainMenu.ResetSelection()
+			return a, nil
+		}
 		a.activateConnection = newModel
+		cmds = append(cmds, newCmd)
+
+	case NetworkStatusPage:
+		if key.Matches(msg, keys.Back) || key.Matches(msg, keys.Save) {
+			a.currentPage = MainMenuPage
+			a.mainMenu.ResetSelection()
+			return a, nil
+		}
+		newModel, newCmd := a.networkStatus.Update(msg)
+		if newModel.IsCompleted() {
+			a.currentPage = MainMenuPage
+			a.mainMenu.ResetSelection()
+			return a, nil
+		}
+		a.networkStatus = newModel
+		cmds = append(cmds, newCmd)
+
+	case PingTestPage:
+		if key.Matches(msg, keys.Back) || key.Matches(msg, keys.Save) {
+			a.currentPage = MainMenuPage
+			a.mainMenu.ResetSelection()
+			return a, nil
+		}
+		newModel, newCmd := a.pingTest.Update(msg)
+		if newModel.IsCompleted() {
+			a.currentPage = MainMenuPage
+			a.mainMenu.ResetSelection()
+			return a, nil
+		}
+		a.pingTest = newModel
+		cmds = append(cmds, newCmd)
+
+	case SystemInfoPage:
+		if key.Matches(msg, keys.Back) || key.Matches(msg, keys.Save) {
+			a.currentPage = MainMenuPage
+			a.mainMenu.ResetSelection()
+			return a, nil
+		}
+		newModel, newCmd := a.systemInfo.Update(msg)
+		if newModel.IsCompleted() {
+			a.currentPage = MainMenuPage
+			a.mainMenu.ResetSelection()
+			return a, nil
+		}
+		a.systemInfo = newModel
+		cmds = append(cmds, newCmd)
+
+	case HelpPage:
+		if key.Matches(msg, keys.Back) {
+			a.currentPage = MainMenuPage
+			a.mainMenu.ResetSelection()
+			return a, nil
+		}
+		newModel, newCmd := a.help.Update(msg)
+		a.help = newModel
 		cmds = append(cmds, newCmd)
 	}
 
