@@ -445,13 +445,30 @@ func ShowNetworkStatus(app *tview.Application) *tview.Flex {
                 app.SetRoot(ShowNetworkStatus(app), true)
         })
         
-        // Adicionando texto de ajuda para mostrar a tecla Esc
+        // Adicionando texto de ajuda
         helpText := tview.NewTextView()
         helpText.SetTextAlign(tview.AlignCenter)
         helpText.SetDynamicColors(true)
-        helpText.SetText("[yellow]" + i18n.T("press_esc_return") + "[white]")
+        helpText.SetText("[yellow]Tab: Navegar • Enter: Selecionar • " + i18n.T("press_esc_return") + "[white]")
         
-        flex.AddItem(buttonsForm, 3, 0, false)
+        // Configurando ordem de foco
+        flex.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+                if event.Key() == tcell.KeyTab {
+                        // Se estiver na tabela, move para os botões
+                        if table.HasFocus() {
+                                app.SetFocus(buttonsForm)
+                                return nil
+                        }
+                        // Se estiver nos botões, volta para a tabela
+                        if buttonsForm.HasFocus() {
+                                app.SetFocus(table)
+                                return nil
+                        }
+                }
+                return event
+        })
+        
+        flex.AddItem(buttonsForm, 3, 0, true) // Mudado para true para permitir foco
         flex.AddItem(helpText, 1, 0, false)
         
         return flex
