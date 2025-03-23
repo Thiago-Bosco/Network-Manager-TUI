@@ -48,9 +48,11 @@ func createMainMenu(app *tview.Application) *tview.Flex {
 			configureNetworkMenu(app)
 		}).
 		AddItem("📡 "+i18n.T("menu_status"), "", '2', func() {
+			history.AddAction("user", "menu_access", "Network Status", "", "system")
 			showNetworkStatus(app)
 		}).
 		AddItem("📶 "+i18n.T("menu_ping_test"), "", '3', func() {
+			history.AddAction("user", "menu_access", "Ping Test", "", "system")
 			showPingTest(app)
 		}).
 		AddItem("📊 "+i18n.T("menu_sysinfo"), "", '4', func() {
