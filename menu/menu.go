@@ -39,33 +39,33 @@ func StartMenu(app *tview.Application) {
 
 // Cria o menu principal
 func createMainMenu(app *tview.Application) *tview.Flex {
-        // Lista com as opções do menu com tradução das descrições
+        // Lista com as opções do menu sem descrições
         list := tview.NewList().
-                AddItem("🔌 "+i18n.T("menu_configure"), i18n.T("menu_desc_configure"), '1', func() {
+                AddItem("🔌 "+i18n.T("menu_configure"), "", '1', func() {
                         configureNetworkMenu(app)
                 }).
-                AddItem("📡 "+i18n.T("menu_status"), i18n.T("menu_desc_status"), '2', func() {
+                AddItem("📡 "+i18n.T("menu_status"), "", '2', func() {
                         showNetworkStatus(app)
                 }).
-                AddItem("📶 "+i18n.T("menu_ping_test"), i18n.T("menu_desc_ping"), '3', func() {
+                AddItem("📶 "+i18n.T("menu_ping_test"), "", '3', func() {
                         showPingTest(app)
                 }).
-                AddItem("📊 "+i18n.T("menu_sysinfo"), i18n.T("menu_desc_sysinfo"), '4', func() {
+                AddItem("📊 "+i18n.T("menu_sysinfo"), "", '4', func() {
                         showSystemInfo(app)
                 }).
-                AddItem("ℹ️ "+i18n.T("menu_help"), i18n.T("menu_desc_help"), '5', func() {
+                AddItem("ℹ️ "+i18n.T("menu_help"), "", '5', func() {
                         showHelp(app)
                 }).
-                AddItem("🔄 "+i18n.T("menu_reboot"), i18n.T("menu_desc_reboot"), '6', func() {
+                AddItem("🔄 "+i18n.T("menu_reboot"), "", '6', func() {
                         confirmAndExecute(app, i18n.T("reboot_title"), i18n.T("reboot_message"), rebootSystem)
                 }).
-                AddItem("⏻ "+i18n.T("menu_shutdown"), i18n.T("menu_desc_shutdown"), '7', func() {
+                AddItem("⏻ "+i18n.T("menu_shutdown"), "", '7', func() {
                         confirmAndExecute(app, i18n.T("shutdown_title"), i18n.T("shutdown_message"), shutdownSystem)
                 }).
-                AddItem("🌐 "+i18n.T("menu_language"), i18n.T("menu_desc_language"), '8', func() {
+                AddItem("🌐 "+i18n.T("menu_language"), "", '8', func() {
                         changeLanguage(app)
                 }).
-                AddItem("❌ "+i18n.T("menu_exit"), i18n.T("menu_desc_exit"), '9', func() {
+                AddItem("❌ "+i18n.T("menu_exit"), "", '9', func() {
                         app.Stop()
                 })
 
