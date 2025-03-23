@@ -115,6 +115,9 @@ func showSystemInfo(app *tview.Application) {
 	textView.SetTextAlign(tview.AlignLeft)
 	textView.SetBackgroundColor(tcell.ColorBlack)
 	textView.SetText(sysinfo.GetSystemInfo())
+	
+	// Log da ação sem exibir no menu
+	logger.LogInfo("Visualizando informações do sistema")
 
 	// Aplicando uma borda bonita
 	textView.SetBorder(true)
