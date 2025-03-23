@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"sync"
 	"time"
+	
+	"networkmanager-tui/logger"
 )
 
 type Action struct {

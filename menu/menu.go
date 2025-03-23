@@ -9,7 +9,9 @@ import (
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 
+	"networkmanager-tui/history"
 	"networkmanager-tui/i18n"
+	"networkmanager-tui/logger"
 	"networkmanager-tui/network"
 	"networkmanager-tui/sysinfo"
 )
