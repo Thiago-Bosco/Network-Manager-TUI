@@ -40,7 +40,7 @@ func StartMenu(app *tview.Application) {
 }
 
 // Cria o menu principal
-func createMainMenu(app *tview.Application) *tview.Flex {
+func CreateMainMenu(app *tview.Application) *tview.Flex {
 	// Lista com as opções do menu sem descrições
 	list := tview.NewList().
 		AddItem("🔌 "+i18n.T("menu_configure"), "", '1', func() {

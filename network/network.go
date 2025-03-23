@@ -437,7 +437,7 @@ func ShowNetworkStatus(app *tview.Application) *tview.Flex {
 	buttonsForm.SetBackgroundColor(backgroundColor)
 
 	buttonsForm.AddButton(i18n.T("network_back"), func() {
-		app.Stop() // Retorna ao menu principal
+		app.SetRoot(menu.CreateMainMenu(app), true)
 	})
 
 	buttonsForm.AddButton(i18n.T("network_refresh"), func() {
