@@ -622,129 +622,12 @@ func ConfigureNetwork(app *tview.Application) *tview.Flex {
 	// Botões
 	form.AddButton(i18n.T("network_save"), func() {
 		// Aqui implementaria a lógica para salvar as configurações
-		index, _ := form.GetFormItemByLabel(i18n.T("network_interface")).(*tview.DropDown).GetCurrentOption()
-		interfaceName := interfaces[index]
-
-		if ipv4Mode == 0 { // DHCP
-			if devMode {
-				// Em modo de desenvolvimento, simulamos o comando
-				cmdStr := fmt.Sprintf("Simulando: nmcli con mod %s ipv4.method auto\n", interfaceName)
-				fmt.Print(cmdStr)
-				// Imprimimos informações para debug
-				fmt.Println("[DEBUG] Configurando com DHCP no modo de desenvolvimento")
-				fmt.Printf("[DEBUG] Interface: %s\n", interfaceName)
-				showMessage(app, i18n.T("success_title"), i18n.T("success_message")+" (DEV MODE)")
-				return
-			}
-
-			// Configura a interface para usar DHCP
-			cmd := exec.Command("nmcli", "con", "mod", interfaceName, "ipv4.method", "auto")
-			err := cmd.Run()
-			if err != nil {
-				showMessage(app, i18n.T("error_title"), err.Error())
-				return
-			}
-		} else { // Manual
-			// Configura a interface com IP estático
-			ip := ipInput.GetText()
-			netmask := netmaskInput.GetText()
-			gateway := gatewayInput.GetText()
-			dns1 := dns1Input.GetText()
-			dns2 := dns2Input.GetText()
-
-			// Verifica se os campos obrigatórios estão preenchidos
-			if ip == "" || netmask == "" || gateway == "" || dns1 == "" {
-				showMessage(app, i18n.T("error_title"), i18n.T("error_empty_fields"))
-				return
-			}
-
-			// Validação adicional de formato
-			if !validateIPv4(ip) {
-				showMessage(app, i18n.T("error_title"), i18n.T("error_invalid_ip"))
-				return
-			}
-
-			if !validateNetmask(netmask) {
-				showMessage(app, i18n.T("error_title"), i18n.T("error_invalid_netmask"))
-				return
-			}
-
-			if !validateIPv4(gateway) {
-				showMessage(app, i18n.T("error_title"), i18n.T("error_invalid_gateway"))
-				return
-			}
-
-			if !validateIPv4(dns1) {
-				showMessage(app, i18n.T("error_title"), i18n.T("error_invalid_dns1"))
-				return
-			}
-
-			if dns2 != "" && !validateIPv4(dns2) {
-				showMessage(app, i18n.T("error_title"), i18n.T("error_invalid_dns2"))
-				return
-			}
-
-			if devMode {
-				// Em modo de desenvolvimento, simulamos o comando
-				cmdStr := fmt.Sprintf("Simulando: nmcli con mod %s ipv4.method manual ipv4.addresses %s/%s ipv4.gateway %s",
-					interfaceName, ip, netmask, gateway)
-
-				if dns2 != "" {
-					cmdStr += fmt.Sprintf(" ipv4.dns %s,%s", dns1, dns2)
-				} else {
-					cmdStr += fmt.Sprintf(" ipv4.dns %s", dns1)
-				}
-
-				fmt.Println(cmdStr)
-
-				// Logs detalhados para debug
-				fmt.Println("[DEBUG] Configurando com IP Manual no modo de desenvolvimento")
-				fmt.Printf("[DEBUG] Interface: %s\n", interfaceName)
-				fmt.Printf("[DEBUG] IP: %s\n", ip)
-				fmt.Printf("[DEBUG] Netmask: %s\n", netmask)
-				fmt.Printf("[DEBUG] Gateway: %s\n", gateway)
-				fmt.Printf("[DEBUG] DNS1: %s\n", dns1)
-				fmt.Printf("[DEBUG] DNS2: %s\n", dns2)
-
-				showMessage(app, i18n.T("success_title"), i18n.T("success_message")+" (DEV MODE)")
-				return
-			}
-
-			// Constrói o comando para configuração manual
-			var cmd *exec.Cmd
-			if dns2 != "" {
-				cmd = exec.Command("nmcli", "con", "mod", interfaceName,
-					"ipv4.method", "manual",
-					"ipv4.addresses", fmt.Sprintf("%s/%s", ip, netmask),
-					"ipv4.gateway", gateway,
-					"ipv4.dns", fmt.Sprintf("%s,%s", dns1, dns2))
-			} else {
-				cmd = exec.Command("nmcli", "con", "mod", interfaceName,
-					"ipv4.method", "manual",
-					"ipv4.addresses", fmt.Sprintf("%s/%s", ip, netmask),
-					"ipv4.gateway", gateway,
-					"ipv4.dns", dns1)
-			}
-
-			err := cmd.Run()
-			if err != nil {
-				showMessage(app, i18n.T("error_title"), err.Error())
-				return
-			}
+		if err := applyNetworkSettings(form); err != nil {
+			showMessage(app, i18n.T("error_title"), err.Error())
+			return
 		}
+		showMessage(app, i18n.T("success_title"), i18n.T("success_message"))
 
-		// Se não estamos no modo de desenvolvimento, ativamos a conexão
-		if !devMode {
-			// Ativa a conexão
-			activateCmd := exec.Command("nmcli", "con", "up", interfaceName)
-			err := activateCmd.Run()
-			if err != nil {
-				showMessage(app, i18n.T("error_title"), err.Error())
-				return
-			}
-
-			showMessage(app, i18n.T("success_title"), i18n.T("success_message"))
-		}
 	})
 
 	form.AddButton(i18n.T("network_cancel"), func() {
@@ -765,4 +648,43 @@ func ConfigureNetwork(app *tview.Application) *tview.Flex {
 		AddItem(helpText, 1, 0, false)
 
 	return flex
+}
+
+
+// Função para aplicar as configurações de rede baseadas nas opções selecionadas
+func applyNetworkSettings(form *tview.Form) error {
+    // Obtém a interface selecionada
+    interfaceIndex, _ := form.GetFormItemByLabel(i18n.T("network_interface")).(*tview.DropDown).GetCurrentOption()
+    interfaces, _ := GetNetworkConnections()
+    interfaceName := interfaces[interfaceIndex]
+
+    // Obtém o modo IPv4
+    ipv4Mode, _ := form.GetFormItemByLabel(i18n.T("network_ipv4_mode")).(*tview.DropDown).GetCurrentOption()
+
+    if ipv4Mode == 1 { // Manual
+        ip := form.GetFormItemByLabel(i18n.T("network_ipv4_address")).(*tview.InputField).GetText()
+        netmask := form.GetFormItemByLabel(i18n.T("network_ipv4_netmask")).(*tview.InputField).GetText()
+        gateway := form.GetFormItemByLabel(i18n.T("network_ipv4_gateway")).(*tview.InputField).GetText()
+        dns1 := form.GetFormItemByLabel(i18n.T("network_ipv4_dns1")).(*tview.InputField).GetText()
+        dns2 := form.GetFormItemByLabel(i18n.T("network_ipv4_dns2")).(*tview.InputField).GetText()
+
+        // Executa o comando nmcli para configuração manual
+        cmd := exec.Command("nmcli", "connection", "modify", interfaceName,
+            "ipv4.method", "manual",
+            "ipv4.addresses", fmt.Sprintf("%s/%s", ip, netmask),
+            "ipv4.gateway", gateway,
+            "ipv4.dns", fmt.Sprintf("%s,%s", dns1, dns2))
+
+        if err := cmd.Run(); err != nil {
+            return fmt.Errorf("erro ao configurar IPv4: %w", err)
+        }
+
+        // Reativa a conexão para aplicar as mudanças
+        activateCmd := exec.Command("nmcli", "connection", "up", interfaceName)
+        if err := activateCmd.Run(); err != nil {
+            return fmt.Errorf("erro ao reativar conexão: %w", err)
+        }
+    }
+
+    return nil
 }
