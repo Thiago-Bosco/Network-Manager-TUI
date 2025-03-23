@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 	"networkmanager-tui/i18n"
+	"networkmanager-tui/menu"
 	"flag"
 )
 
