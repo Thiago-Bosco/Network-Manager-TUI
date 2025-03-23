@@ -16,7 +16,7 @@ func Execute() error {
 	p := tea.NewProgram(
 		app,
 		tea.WithAltScreen(),       // Use alternate screen buffer
-		tea.WithMouseCellMotion(), // Enable mouse support
+		tea.WithoutMouseAllMotion(), // Disable mouse motion/scroll
 	)
 	
 	if _, err := p.Run(); err != nil {
