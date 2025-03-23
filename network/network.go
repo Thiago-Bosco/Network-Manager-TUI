@@ -498,17 +498,15 @@ func ConfigureNetwork(app *tview.Application) *tview.Flex {
         
         // Adicionamos o dropdown com o callback correto
         form.AddDropDown(i18n.T("network_ipv4_mode"), mode_options, ipv4Mode, func(option string, index int) {
-                ipv4Mode = index
-                
                 if ipInput != nil {
-                    if index == 1 { // Manual
+                    if option == IPv4ModeManual {
                         // Mostra campos de configuração manual IPv4
                         ipInput.SetDisabled(false)
                         netmaskInput.SetDisabled(false)
                         gatewayInput.SetDisabled(false)
                         dns1Input.SetDisabled(false)
                         dns2Input.SetDisabled(false)
-                    } else { // Auto/DHCP (index == 0)
+                    } else { // Auto/DHCP
                         // Desabilita campos de configuração manual IPv4
                         ipInput.SetDisabled(true)
                         netmaskInput.SetDisabled(true)
