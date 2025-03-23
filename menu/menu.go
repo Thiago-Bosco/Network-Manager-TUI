@@ -42,6 +42,7 @@ func createMainMenu(app *tview.Application) *tview.Flex {
 	// Lista com as opções do menu sem descrições
 	list := tview.NewList().
 		AddItem("🔌 "+i18n.T("menu_configure"), "", '1', func() {
+			history.AddAction("user", "menu_access", "Configure Network")
 			configureNetworkMenu(app)
 		}).
 		AddItem("📡 "+i18n.T("menu_status"), "", '2', func() {
