@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 	"networkmanager-tui/i18n"
-	"networkmanager-tui/menu"
+	"networkmanager-tui/common"
 	"flag"
 )
 
@@ -438,7 +438,7 @@ func ShowNetworkStatus(app *tview.Application) *tview.Flex {
 	buttonsForm.SetBackgroundColor(backgroundColor)
 
 	buttonsForm.AddButton(i18n.T("network_back"), func() {
-		app.SetRoot(menu.CreateMainMenu(app), true)
+		app.SetRoot(common.MainMenuCreator(app), true)
 	})
 
 	buttonsForm.AddButton(i18n.T("network_refresh"), func() {
