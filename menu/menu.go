@@ -31,10 +31,10 @@ var (
         infoColor        = tcell.ColorLightSkyBlue   // Cor para mensagens informativas
 )
 
-// StartMenu inicia o menu principal da aplicação
-func StartMenu(app *tview.Application) {
-        mainFlex := createMainMenu(app)
-        app.SetRoot(mainFlex, true)
+// IniciarMenu apresenta o menu principal do sistema
+func IniciarMenu(app *tview.Application) {
+        menuPrincipal := criarMenuPrincipal(app)
+        app.SetRoot(menuPrincipal, true)
 }
 
 // Cria o menu principal

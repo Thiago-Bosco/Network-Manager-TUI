@@ -12,10 +12,10 @@ var (
 // Strings para cada idioma
 var translations = map[string]map[string]string{
         "en": {
-                "menu_title":        "Network Manager TUI",
-                "menu_configure":    "Configure Network",
-                "menu_status":       "Network Status",
-                "menu_ping_test":    "Ping Test",
+                "menu_title":        "Gerenciador de Rede",
+                "menu_configure":    "Configurar Rede",
+                "menu_status":       "Status da Rede", 
+                "menu_ping_test":    "Teste de Ping",
                 "menu_sysinfo":      "System Information",
                 "menu_reboot":       "Reboot",
                 "menu_shutdown":     "ShutDown",

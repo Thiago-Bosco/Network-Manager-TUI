@@ -147,16 +147,15 @@ func GetNetworkConnections() ([]string, error) {
         return interfaces, nil
 }
 
-// Função para obter o nome da conexão ativa
-func GetActiveConnection() (string, error) {
+// ObterConexaoAtiva retorna o nome da conexão de rede atual
+func ObterConexaoAtiva() (string, error) {
         cmd := exec.Command("nmcli", "-t", "-f", "NAME", "connection", "show", "--active")
-        output, err := cmd.Output()
+        saida, err := cmd.Output()
         if err != nil {
-                return "", fmt.Errorf("erro ao obter a conexão ativa: %w", err)
+                return "", fmt.Errorf("não foi possível obter a conexão ativa: %w", err)
         }
 
-        // Retorna o nome da conexão ativa
-        return strings.TrimSpace(string(output)), nil
+        return strings.TrimSpace(string(saida)), nil
 }
 
 // Estrutura para armazenar informações detalhadas de uma conexão de rede
