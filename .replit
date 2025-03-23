@@ -4,7 +4,7 @@ modules = ["go-1.21", "nix"]
 channel = "stable-24_05"
 
 [workflows]
-runButton = "Network Manager TUI (Production)"
+runButton = "Run Dev Mode"
 
 [[workflows.workflow]]
 name = "Project"
@@ -37,6 +37,33 @@ mode = "sequential"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "go run main.go"
+
+[[workflows.workflow]]
+name = "Test Dev Mode"
+author = 40775052
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "go run main.go -dev"
+
+[[workflows.workflow]]
+name = "Test Production Mode"
+author = 40775052
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "sudo go run main.go"
+
+[[workflows.workflow]]
+name = "Run Dev Mode"
+author = 40775052
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "go run main.go -dev"
 
 [deployment]
 run = ["sh", "-c", "./networkmanager-tui"]
