@@ -2,17 +2,8 @@
 package menu
 
 import (
-        "flag"
-        "fmt"
-        "os/exec"
-        "time"
-
         "github.com/gdamore/tcell/v2"
         "github.com/rivo/tview"
-
-        "networkmanager-tui/i18n"
-        "networkmanager-tui/network"
-        "networkmanager-tui/sysinfo"
 )
 
 // Cores padrão para UI
@@ -44,18 +35,18 @@ func criarMenuPrincipal(app *tview.Application) *tview.Flex {
         layout := tview.NewFlex().SetDirection(tview.FlexRow)
         
         // Criar lista de opções
-        lista := tview.NewList().
-                SetBorder(true).
-                SetTitle(" Menu Principal ").
-                SetTitleAlign(tview.AlignLeft).
-                SetBorderColor(corBorda)
+        lista := tview.NewList()
+        lista.SetBorder(true).
+             SetTitle(" Menu Principal ").
+             SetTitleAlign(tview.AlignLeft).
+             SetBorderColor(corBorda)
 
         // Adicionar opções ao menu
-        lista.AddItem("Configurar Rede", "", 'r', nil).
-                AddItem("Informações do Sistema", "", 's', nil).
-                AddItem("Sair", "", 'q', func() {
-                        app.Stop()
-                })
+        lista.AddItem("Configurar Rede", "Configurar interfaces de rede", 'r', nil).
+             AddItem("Informações do Sistema", "Exibir informações do sistema", 's', nil).
+             AddItem("Sair", "Sair do programa", 'q', func() {
+                app.Stop()
+             })
 
         // Adicionar lista ao layout
         layout.AddItem(lista, 0, 1, true)
