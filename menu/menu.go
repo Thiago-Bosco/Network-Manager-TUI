@@ -35,12 +35,12 @@ var (
 
 // StartMenu inicia o menu principal da aplicação
 func StartMenu(app *tview.Application) {
-	mainFlex := CreateMainMenu(app)
+	mainFlex := createMainMenu(app)
 	app.SetRoot(mainFlex, true)
 }
 
 // Cria o menu principal
-func CreateMainMenu(app *tview.Application) *tview.Flex {
+func createMainMenu(app *tview.Application) *tview.Flex {
 	// Lista com as opções do menu sem descrições
 	list := tview.NewList().
 		AddItem("🔌 "+i18n.T("menu_configure"), "", '1', func() {
@@ -120,7 +120,7 @@ func showSystemInfo(app *tview.Application) {
 	textView.SetTextAlign(tview.AlignLeft)
 	textView.SetBackgroundColor(tcell.ColorBlack)
 	textView.SetText(sysinfo.GetSystemInfo())
-
+	
 	// Log da ação sem exibir no menu
 	logger.LogInfo("Visualizando informações do sistema")
 
@@ -187,7 +187,7 @@ func confirmAndExecute(app *tview.Application, title, message string, action fun
 					showMessage(app, i18n.T("error_title"), fmt.Sprintf("Error: %v", err))
 				}
 			} else {
-				app.SetRoot(CreateMainMenu(app), true)
+				app.SetRoot(createMainMenu(app), true)
 			}
 		})
 
@@ -210,7 +210,7 @@ func changeLanguage(app *tview.Application) {
 			} else {
 				i18n.SetLanguage("pt")
 			}
-			app.SetRoot(CreateMainMenu(app), true)
+			app.SetRoot(createMainMenu(app), true)
 		})
 
 	modal.SetBorder(true).
@@ -227,7 +227,7 @@ func showMessage(app *tview.Application, title, message string) {
 		SetText(message).
 		AddButtons([]string{"OK"}).
 		SetDoneFunc(func(buttonIndex int, buttonLabel string) {
-			app.SetRoot(CreateMainMenu(app), true)
+			app.SetRoot(createMainMenu(app), true)
 		})
 
 	// Define a cor do título com base no tipo de mensagem
@@ -354,7 +354,7 @@ func showPingTest(app *tview.Application) {
 	})
 
 	form.AddButton(i18n.T("network_back"), func() {
-		app.SetRoot(CreateMainMenu(app), true)
+		app.SetRoot(createMainMenu(app), true)
 	})
 
 	// Adicionando texto de ajuda para mostrar a tecla Esc
@@ -410,7 +410,7 @@ func showHelp(app *tview.Application) {
 	form := tview.NewForm()
 	form.SetBackgroundColor(backgroundColor)
 	form.AddButton(i18n.T("network_back"), func() {
-		app.SetRoot(CreateMainMenu(app), true)
+		app.SetRoot(createMainMenu(app), true)
 	})
 
 	// Adicionando texto de ajuda para mostrar a tecla Esc
