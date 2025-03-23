@@ -4,7 +4,7 @@ modules = ["go-1.21", "nix"]
 channel = "stable-24_05"
 
 [workflows]
-runButton = "Dev Mode"
+runButton = "Development"
 
 [[workflows.workflow]]
 name = "Project"
@@ -76,6 +76,24 @@ args = "go run main.go -dev"
 
 [[workflows.workflow]]
 name = "Production Mode"
+author = 40775052
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "sudo go run main.go"
+
+[[workflows.workflow]]
+name = "Development"
+author = 40775052
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "go run main.go -dev"
+
+[[workflows.workflow]]
+name = "Production"
 author = 40775052
 mode = "sequential"
 
