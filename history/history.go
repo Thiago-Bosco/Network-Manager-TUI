@@ -51,10 +51,18 @@ func GetHistory() []Action {
 }
 
 func logAction(action Action) {
-	logEntry := fmt.Sprintf("[%s] User %s: %s - %s | Modificado por: %s | Alterações: %s",
-		action.Timestamp.Format("2006-01-02 15:04:05"),
+	logEntry := fmt.Sprintf(`
+=== Log de Ação ===
+Data/Hora: %s
+Usuário: %s
+Ação: %s
+Detalhes: %s
+Modificado por: %s
+Alterações: %s
+==================`,
+		action.Timestamp.Format("02/01/2006 15:04:05"),
 		action.UserID,
-		action.Action,
+		action.Action, 
 		action.Details,
 		action.ModifiedBy,
 		action.Changes)
