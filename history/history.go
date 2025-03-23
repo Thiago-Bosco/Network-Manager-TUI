@@ -10,10 +10,12 @@ import (
 )
 
 type Action struct {
-	Timestamp time.Time
-	UserID    string
-	Action    string
-	Details   string
+	Timestamp   time.Time
+	UserID      string
+	Action      string
+	Details     string
+	Changes     string
+	ModifiedBy  string
 }
 
 var (
@@ -21,19 +23,21 @@ var (
 	mutex   sync.RWMutex
 )
 
-func AddAction(userID, actionType, details string) {
+func AddAction(userID, actionType, details string, changes string, modifiedBy string) {
 	mutex.Lock()
 	defer mutex.Unlock()
 
 	action := Action{
-		Timestamp: time.Now(),
-		UserID:    userID,
-		Action:    actionType,
-		Details:   details,
+		Timestamp:   time.Now(),
+		UserID:      userID,
+		Action:      actionType,
+		Details:     details,
+		Changes:     changes,
+		ModifiedBy:  modifiedBy,
 	}
 	actions = append(actions, action)
 
-	// Log a ação também
+	// Log a ação com detalhes extras
 	logAction(action)
 }
 
@@ -41,18 +45,19 @@ func GetHistory() []Action {
 	mutex.RLock()
 	defer mutex.RUnlock()
 
-	// Retorna uma cópia para evitar modificações externas
 	history := make([]Action, len(actions))
 	copy(history, actions)
 	return history
 }
 
 func logAction(action Action) {
-	logEntry := fmt.Sprintf("[%s] User %s: %s - %s",
+	logEntry := fmt.Sprintf("[%s] User %s: %s - %s | Modificado por: %s | Alterações: %s",
 		action.Timestamp.Format("2006-01-02 15:04:05"),
 		action.UserID,
 		action.Action,
-		action.Details)
+		action.Details,
+		action.ModifiedBy,
+		action.Changes)
 	
 	logger.LogInfo(logEntry)
 }
