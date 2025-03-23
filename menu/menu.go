@@ -422,9 +422,27 @@ func showHelp(app *tview.Application) {
 	// Layout principal
 	flex := tview.NewFlex().
 		SetDirection(tview.FlexRow).
-		AddItem(textView, 0, 1, true).
-		AddItem(form, 3, 0, false).
+		AddItem(textView, 0, 1, false).
+		AddItem(form, 3, 0, true).
 		AddItem(helpText, 1, 0, false)
 
+	// Configura a navegação com Tab
+	textView.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+		if event.Key() == tcell.KeyTab {
+			app.SetFocus(form)
+			return nil
+		}
+		return event
+	})
+
+	form.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+		if event.Key() == tcell.KeyTab {
+			app.SetFocus(textView)
+			return nil
+		}
+		return event
+	})
+
 	app.SetRoot(flex, true)
+	app.SetFocus(form)
 }
