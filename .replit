@@ -1,4 +1,4 @@
-modules = ["golang", "golang-1.19", "go-1.19"]
+modules = ["go-1.21", "nix"]
 
 [nix]
 channel = "stable-24_05"
@@ -40,4 +40,3 @@ args = "go run main.go"
 
 [deployment]
 run = ["sh", "-c", "./networkmanager-tui"]
-build = ["sh", "-c", "go build -o networkmanager-tui"]
