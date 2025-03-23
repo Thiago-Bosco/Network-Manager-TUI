@@ -207,32 +207,47 @@ func (a App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 
 	case EditConnectionPage:
-		if key.Matches(msg, keys.Back) {
+		if key.Matches(msg, keys.Back) || key.Matches(msg, keys.Save) {
 			a.currentPage = MainMenuPage
 			a.mainMenu.ResetSelection()
 			return a, nil
 		}
 		newModel, newCmd := a.editConnection.Update(msg)
+		if newModel.IsSaved() {
+			a.currentPage = MainMenuPage
+			a.mainMenu.ResetSelection()
+			return a, nil
+		}
 		a.editConnection = newModel
 		cmds = append(cmds, newCmd)
 
 	case AddConnectionPage:
-		if key.Matches(msg, keys.Back) {
+		if key.Matches(msg, keys.Back) || key.Matches(msg, keys.Save) {
 			a.currentPage = MainMenuPage
 			a.mainMenu.ResetSelection()
 			return a, nil
 		}
 		newModel, newCmd := a.addConnection.Update(msg)
+		if newModel.IsSaved() {
+			a.currentPage = MainMenuPage
+			a.mainMenu.ResetSelection()
+			return a, nil
+		}
 		a.addConnection = newModel
 		cmds = append(cmds, newCmd)
 
 	case WiFiListPage:
-		if key.Matches(msg, keys.Back) {
+		if key.Matches(msg, keys.Back) || key.Matches(msg, keys.Save) {
 			a.currentPage = MainMenuPage
 			a.mainMenu.ResetSelection()
 			return a, nil
 		}
 		newModel, newCmd := a.wifiList.Update(msg)
+		if newModel.IsSaved() {
+			a.currentPage = MainMenuPage
+			a.mainMenu.ResetSelection()
+			return a, nil
+		}
 		a.wifiList = newModel
 		cmds = append(cmds, newCmd)
 
