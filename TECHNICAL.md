@@ -84,7 +84,35 @@ nmcli connection modify [INTERFACE] ipv6.method disabled
 - `ipv6.gateway`: Gateway IPv6
 - `ipv6.dns`: DNS IPv6
 
-### 6. Códigos de Retorno
+### 6. Ambiente Replit
+
+#### 6.1 Arquivo .replit
+O arquivo `.replit` é essencial para configurar o ambiente de desenvolvimento e produção:
+- Define os módulos necessários (go-1.21)
+- Configura workflows para diferentes modos de execução:
+  - Development Mode: `go run main.go -dev`
+  - Production Mode: `sudo go run main.go`
+
+#### 6.2 Workflows
+- **Development Mode**: Executa em modo desenvolvimento (sem sudo)
+- **Production Mode**: Executa com privilégios sudo
+- **Network Manager**: Workflow específico para gerenciamento de rede
+
+#### 6.3 Deployment
+- Build Command: Compilação do projeto
+- Run Command: Execução do binário compilado
+- Acesso via URL do Replit
+
+#### 6.4 Estrutura no Replit
+```
+├── main.go          # Ponto de entrada
+├── network/         # Gerenciamento de rede
+├── menu/           # Interface do usuário
+├── i18n/           # Internacionalização
+└── logger/         # Sistema de logs
+```
+
+### 7. Códigos de Retorno
 
 - 0: Sucesso
 - 1: Erro genérico
