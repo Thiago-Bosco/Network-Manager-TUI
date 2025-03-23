@@ -72,8 +72,8 @@ const (
 	DNSIPv6Padrao2    = "2001:4860:4860::8844"
 )
 
-// ValidarIPv4 verifica se um endereço IPv4 é válido
-func ValidarIPv4(ip string) bool {
+// validateIPv4 verifica se um endereço IPv4 é válido
+func validateIPv4(ip string) bool {
 	padrao := `^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$`
 	corresponde, _ := regexp.MatchString(padrao, ip)
 	return corresponde
