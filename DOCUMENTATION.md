@@ -8,73 +8,115 @@ O Network Manager TUI é uma interface de usuário baseada em terminal (TUI) par
 - **Interface Principal**: Implementada com tview
 - **Internacionalização**: Suporte para múltiplos idiomas
 - **Modularização**: Componentes separados para cada funcionalidade
+- **Segurança**: Verificação de privilégios root e validações
 
-## 3. Funcionalidades
+## 3. Funcionalidades e Comandos NMCLI
+
 ### 3.1 Configuração de Rede
-- Configuração IPv4/IPv6
-- Suporte DHCP e IP estático
-- Configuração de DNS
-- Gestão de interfaces de rede
+#### IPv4 Manual
+```bash
+nmcli connection modify [INTERFACE] \
+    ipv4.method manual \
+    ipv4.addresses [IP/NETMASK] \
+    ipv4.gateway [GATEWAY] \
+    ipv4.dns [DNS1,DNS2]
+```
+
+#### IPv4 Automático (DHCP)
+```bash
+nmcli connection modify [INTERFACE] ipv4.method auto
+```
+
+#### IPv6 Manual
+```bash
+nmcli connection modify [INTERFACE] \
+    ipv6.method manual \
+    ipv6.addresses [IPv6/PREFIX] \
+    ipv6.gateway [GATEWAY] \
+    ipv6.dns [DNS1,DNS2]
+```
+
+#### IPv6 Automático
+```bash
+nmcli connection modify [INTERFACE] ipv6.method auto
+```
+
+#### IPv6 Desabilitado
+```bash
+nmcli connection modify [INTERFACE] \
+    ipv6.addresses "" \
+    ipv6.gateway "" \
+    ipv6.dns "" \
+    ipv6.method disabled
+```
+
+#### Aplicar Alterações
+```bash
+nmcli connection up [INTERFACE]
+```
 
 ### 3.2 Monitoramento
-- Status da rede em tempo real
-- Informações do sistema
-- Teste de conectividade (ping)
-- Monitoramento de recursos
+#### Listar Conexões
+```bash
+nmcli device status
+nmcli -t -f NAME connection show --active
+```
 
-### 3.3 Sistema
-- Reinicialização do sistema
-- Desligamento
-- Troca de idioma
-- Ajuda integrada
+#### Informações Detalhadas
+```bash
+nmcli -t device show [INTERFACE]
+```
 
-## 4. Segurança
-- Verificação de privilégios root
-- Validação de entrada
-- Modo de desenvolvimento seguro
-- Proteção contra comandos perigosos
+## 4. Modos de Execução
+### 4.1 Desenvolvimento
+```bash
+go run main.go -dev
+```
+- Desativa verificação de privilégios root
+- Permite testes sem sudo
 
-## 5. Requisitos Técnicos
-- Sistema Operacional: Linux
-- Dependências: NetworkManager
-- Linguagem: Go 1.21+
-- Bibliotecas: tview, tcell
+### 4.2 Produção
+```bash
+sudo go run main.go
+```
+- Requer privilégios root
+- Habilita todas as funcionalidades
 
-## 6. Interface do Usuário
-- Menu intuitivo
-- Navegação por teclado
-- Feedback visual
-- Suporte a cores e estilos
-
-## 7. Desenvolvimento
-### 7.1 Modos de Execução
-- Modo Desenvolvimento: `go run main.go -dev`
-- Modo Produção: `sudo go run main.go`
-
-### 7.2 Estrutura do Projeto
+## 5. Estrutura do Projeto
 ```
 ├── main.go            # Ponto de entrada
-├── menu/             # Interface principal
 ├── network/          # Gerenciamento de rede
-├── sysinfo/          # Informações do sistema
-└── i18n/             # Internacionalização
+├── i18n/             # Internacionalização
+├── logger/           # Sistema de logs
+└── menu/             # Interface principal
 ```
 
-## 8. Melhorias Futuras
-- [ ] Suporte a VPN
-- [ ] Configuração de firewall
-- [ ] Perfis de rede
-- [ ] Backup de configurações
-- [ ] Logs detalhados
+## 6. Códigos de Erro Comuns
+- **exit status 1**: Erro genérico de execução
+- **exit status 2**: Parâmetros inválidos
+- **exit status 3**: Permissões insuficientes
+- **exit status 4**: Interface não encontrada
+- **exit status 5**: Configuração inválida
+
+## 7. Validações
+- Endereço IPv4: Formato xxx.xxx.xxx.xxx
+- Máscara: Número CIDR (1-32) ou formato IPv4
+- IPv6: Formato hexadecimal com ':'
+- Prefixo IPv6: Número (1-128)
+
+## 8. Dependências
+- NetworkManager
+- Go 1.21+
+- tview
+- tcell
 
 ## 9. Suporte e Manutenção
-- Atualizações regulares
-- Correções de bugs
-- Melhorias de desempenho
-- Documentação atualizada
+- Atualizações via Git
+- Logs em /logs/
+- Backup automático de configurações
 
-## 10. Considerações de Uso
-- Necessita privilégios root para operações do sistema
-- Compatível com NetworkManager
-- Interface adaptável a diferentes terminais
-- Suporte a múltiplos idiomas
+## 10. Segurança
+- Validação de entrada
+- Verificação de privilégios
+- Proteção contra comandos perigosos
+- Logs de alterações
