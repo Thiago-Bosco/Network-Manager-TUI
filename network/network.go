@@ -710,13 +710,24 @@ func applyNetworkSettings(form *tview.Form) error {
             return fmt.Errorf("erro ao configurar IPv6: %w", err)
         }
     } else if ipv6Mode == 2 { // Desabilitado
-        cmd := exec.Command("nmcli", "connection", "modify", interfaceName, 
-            "ipv6.method", "disabled",
+        // Primeiro, limpa todas as configurações IPv6
+        cleanCmd := exec.Command("nmcli", "connection", "modify", interfaceName,
             "ipv6.addresses", "",
             "ipv6.gateway", "",
             "ipv6.dns", "")
         
-        if output, err := cmd.CombinedOutput(); err != nil {
+        if output, err := cleanCmd.CombinedOutput(); err != nil {
+            return fmt.Errorf("erro ao limpar configurações IPv6: %v (saída: %s)", err, string(output))
+        }
+        
+        // Depois, desabilita o IPv6
+        disableCmd := exec.Command("nmcli", "connection", "modify", interfaceName,
+            "ipv6.method", "disabled")
+            
+        if output, err := disableCmd.CombinedOutput(); err != nil {
+            if exitErr, ok := err.(*exec.ExitError); ok {
+                return fmt.Errorf("erro ao desabilitar IPv6 (código %d): %s", exitErr.ExitCode(), string(output))
+            }
             return fmt.Errorf("erro ao desabilitar IPv6: %v (saída: %s)", err, string(output))
         }
     } else { // Automático
