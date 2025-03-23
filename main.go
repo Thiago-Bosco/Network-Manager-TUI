@@ -51,29 +51,17 @@ func main() {
 	}
 	defer logger.Close()
 
-	// Flag para desenvolvimento (desativa a verificação de root)
-	devMode := flag.Bool("dev", false, "Ativa o modo de desenvolvimento (desativa verificação de privilégios)")
-	flag.Parse()
-
-	// Check root privileges unless in development mode
-	if !*devMode {
-		if os.Geteuid() != 0 {
-			fmt.Println(i18n.T("error_root_required"))
-			fmt.Println("Por favor, execute com sudo ou como usuário root.")
-			fmt.Println("Ou use a flag -dev para testes em desenvolvimento: go run main.go -dev")
-			os.Exit(1)
-		}
-		// Verificação adicional de permissões
-		if _, err := os.Stat("/etc/network"); os.IsPermission(err) {
-			fmt.Println("Erro: Sem permissão para acessar configurações de rede")
-			os.Exit(1)
-		}
+	// Verifica privilégios root
+	if os.Geteuid() != 0 {
+		fmt.Println(i18n.T("error_root_required"))
+		fmt.Println("Por favor, execute com sudo ou como usuário root.")
+		os.Exit(1)
 	}
-
-	// Aviso se estiver em modo de desenvolvimento
-	if *devMode {
-		fmt.Println("ATENÇÃO: Modo de desenvolvimento ativado. A verificação de privilégios root está desativada.")
-		fmt.Println("Algumas funcionalidades que modificam o sistema operacional não funcionarão corretamente.")
+	
+	// Verificação de permissões
+	if _, err := os.Stat("/etc/network"); os.IsPermission(err) {
+		fmt.Println("Erro: Sem permissão para acessar configurações de rede")
+		os.Exit(1)
 	}
 
 	// Cria uma nova aplicação tview
