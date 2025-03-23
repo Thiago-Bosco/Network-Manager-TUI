@@ -671,7 +671,8 @@ func applyNetworkSettings(form *tview.Form) error {
             "ipv4.method", "manual",
             "ipv4.addresses", fmt.Sprintf("%s/%s", ip, netmask),
             "ipv4.gateway", gateway,
-            "ipv4.dns", fmt.Sprintf("%s,%s", dns1, dns2))
+            "ipv4.dns", fmt.Sprintf("%s,%s", dns1, dns2),
+            "ipv4.netmask", netmask)
 
         if err := cmd.Run(); err != nil {
             return fmt.Errorf("erro ao configurar IPv4: %w", err)
