@@ -383,12 +383,29 @@ func showPingTest(app *tview.Application) {
         helpText.SetDynamicColors(true)
         helpText.SetText("[yellow]" + i18n.T("press_esc_return") + "[white]")
         
-        // Layout principal
+        // Layout principal com navegação melhorada
         flex := tview.NewFlex().
                 SetDirection(tview.FlexRow).
                 AddItem(form, 10, 0, true).
-                AddItem(resultsTextView, 0, 1, false).
+                AddItem(resultsTextView, 0, 1, true).  // Permite foco
                 AddItem(helpText, 1, 0, false)
+
+        // Configura a ordem de navegação com Tab
+        form.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+                if event.Key() == tcell.KeyTab {
+                        app.SetFocus(resultsTextView)
+                        return nil
+                }
+                return event
+        })
+
+        resultsTextView.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+                if event.Key() == tcell.KeyTab {
+                        app.SetFocus(form)
+                        return nil
+                }
+                return event
+        })
         
         app.SetRoot(flex, true)
 }

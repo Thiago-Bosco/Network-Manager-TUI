@@ -97,26 +97,29 @@ func main() {
         // Desabilita combinações de teclas de sistema
         app.EnableMouse(false)
         app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
-                // Bloqueia Ctrl+C, Ctrl+Z e outras combinações de controle
-                if event.Modifiers() == tcell.ModCtrl {
-                        return nil
-                }
-                // Bloqueia Alt+Tab e outras combinações Alt
-                if event.Modifiers() == tcell.ModAlt {
-                        return nil
-                }
-                // Permite apenas teclas necessárias para navegação
+                // Permite teclas de navegação e atalhos importantes
                 switch event.Key() {
-                case tcell.KeyEscape, tcell.KeyEnter, tcell.KeyTab, 
-                     tcell.KeyBacktab, tcell.KeyUp, tcell.KeyDown, 
-                     tcell.KeyLeft, tcell.KeyRight:
-                        return event
-                case tcell.KeyRune:
-                        // Permite entrada de texto normal
-                        return event
-                default:
+                case tcell.KeyEscape:
+                        // Volta ao menu principal
+                        app.QueueUpdateDraw(func() {
+                                menu.StartMenu(app)
+                        })
+                        return nil
+                case tcell.KeyTab:
+                        if event.Modifiers() == tcell.ModShift {
+                                // Shift+Tab: navegação reversa
+                                app.SetFocus(app.GetFocus().InputHandler()(tview.NewEventKey(tcell.KeyBacktab, 0, 0)))
+                                return nil
+                        }
+                        // Tab: próximo elemento
+                        app.SetFocus(app.GetFocus().InputHandler()(event))
+                        return nil
+                case tcell.KeyBacktab:
+                        // Navegação reversa
+                        app.SetFocus(app.GetFocus().InputHandler()(event))
                         return nil
                 }
+                return event
         })
 
         // Inicia a aplicação
