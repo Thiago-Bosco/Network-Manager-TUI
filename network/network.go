@@ -496,17 +496,19 @@ func ConfigureNetwork(app *tview.Application) *tview.Flex {
         // Campos para configuração manual de IPv4
         var ipInput, netmaskInput, gatewayInput, dns1Input, dns2Input *tview.InputField
         
-        // Adicionamos o dropdown com o callback correto, usando a mesma lógica do IPv6
+        // Adicionamos o dropdown com o callback correto
         form.AddDropDown(i18n.T("network_ipv4_mode"), mode_options, ipv4Mode, func(option string, index int) {
+                ipv4Mode = index
+                
                 if ipInput != nil {
-                    if option == IPv4ModeManual {
+                    if index == 1 { // Manual
                         // Mostra campos de configuração manual IPv4
                         ipInput.SetDisabled(false)
                         netmaskInput.SetDisabled(false)
                         gatewayInput.SetDisabled(false)
                         dns1Input.SetDisabled(false)
                         dns2Input.SetDisabled(false)
-                    } else { // Auto/DHCP
+                    } else { // Auto/DHCP (index == 0)
                         // Desabilita campos de configuração manual IPv4
                         ipInput.SetDisabled(true)
                         netmaskInput.SetDisabled(true)
