@@ -15,11 +15,41 @@ var (
 	logFile     *os.File
 )
 
+func cleanOldLogs() error {
+	logDir := "logs"
+	files, err := os.ReadDir(logDir)
+	if err != nil {
+		return fmt.Errorf("erro ao ler diretório de logs: %v", err)
+	}
+
+	cutoffDate := time.Now().AddDate(0, 0, -90)
+	for _, file := range files {
+		if !file.IsDir() {
+			filePath := filepath.Join(logDir, file.Name())
+			fileInfo, err := file.Info()
+			if err != nil {
+				continue
+			}
+			
+			if fileInfo.ModTime().Before(cutoffDate) {
+				os.Remove(filePath)
+				LogInfo("Log antigo removido: %s", file.Name())
+			}
+		}
+	}
+	return nil
+}
+
 func Init() error {
 	// Cria diretório de logs se não existir
 	logDir := "logs"
 	if err := os.MkdirAll(logDir, 0755); err != nil {
 		return fmt.Errorf("erro ao criar diretório de logs: %v", err)
+	}
+
+	// Limpa logs antigos
+	if err := cleanOldLogs(); err != nil {
+		LogError("Erro ao limpar logs antigos: %v", err)
 	}
 
 	// Nome do arquivo de log com timestamp
