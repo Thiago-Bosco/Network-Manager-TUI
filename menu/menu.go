@@ -33,7 +33,7 @@ var (
 
 // IniciarMenu apresenta o menu principal do sistema
 func IniciarMenu(app *tview.Application) {
-        menuPrincipal := criarMenuPrincipal(app)
+        menuPrincipal := createMainMenu(app)
         app.SetRoot(menuPrincipal, true)
 }
 
