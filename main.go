@@ -89,6 +89,31 @@ func main() {
         // Inicia animação de título
         animateTitle(app, "Network Manager TUI")
 
+        // Desabilita combinações de teclas de sistema
+        app.EnableMouse(false)
+        app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+                // Bloqueia Ctrl+C, Ctrl+Z e outras combinações de controle
+                if event.Modifiers() == tcell.ModCtrl {
+                        return nil
+                }
+                // Bloqueia Alt+Tab e outras combinações Alt
+                if event.Modifiers() == tcell.ModAlt {
+                        return nil
+                }
+                // Permite apenas teclas necessárias para navegação
+                switch event.Key() {
+                case tcell.KeyEscape, tcell.KeyEnter, tcell.KeyTab, 
+                     tcell.KeyBacktab, tcell.KeyUp, tcell.KeyDown, 
+                     tcell.KeyLeft, tcell.KeyRight:
+                        return event
+                case tcell.KeyRune:
+                        // Permite entrada de texto normal
+                        return event
+                default:
+                        return nil
+                }
+        })
+
         // Inicia a aplicação
         if err := app.Run(); err != nil {
                 panic(err)
