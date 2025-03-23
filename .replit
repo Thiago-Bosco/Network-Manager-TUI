@@ -4,7 +4,7 @@ modules = ["go-1.21", "nix"]
 channel = "stable-24_05"
 
 [workflows]
-runButton = "Network Manager"
+runButton = "Development Mode"
 
 [[workflows.workflow]]
 name = "Project"
@@ -109,6 +109,15 @@ mode = "sequential"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "sudo go run main.go"
+
+[[workflows.workflow]]
+name = "Development Mode"
+author = 40778994
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "go run main.go -dev"
 
 [deployment]
 run = ["sh", "-c", "./networkmanager-tui"]

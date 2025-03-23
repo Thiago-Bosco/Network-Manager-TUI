@@ -44,6 +44,10 @@ func animateTitle(app *tview.Application, title string) {
 }
 
 func main() {
+	// Parse command line flags
+	devMode := flag.Bool("dev", false, "Enable development mode")
+	flag.Parse()
+
 	// Inicializa o sistema de logs
 	if err := logger.Init(); err != nil {
 		fmt.Printf("Erro ao inicializar logs: %v\n", err)
@@ -51,8 +55,8 @@ func main() {
 	}
 	defer logger.Close()
 
-	// Verifica privilégios root
-	if os.Geteuid() != 0 {
+	// Verifica privilégios root (skip in dev mode)
+	if !*devMode && os.Geteuid() != 0 {
 		fmt.Println(i18n.T("error_root_required"))
 		fmt.Println("Por favor, execute com sudo ou como usuário root.")
 		os.Exit(1)
