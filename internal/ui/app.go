@@ -22,6 +22,12 @@ type keyMap struct {
 	Help   key.Binding
 }
 
+// Disable mouse events
+func (m Model) MouseScrollLeft()  tea.Msg { return nil }
+func (m Model) MouseScrollRight() tea.Msg { return nil }
+func (m Model) MouseScrollUp()    tea.Msg { return nil }
+func (m Model) MouseScrollDown()  tea.Msg { return nil }
+
 // ShortHelp returns keybindings to be shown in the mini help view.
 func (k keyMap) ShortHelp() []key.Binding {
 	return []key.Binding{k.Up, k.Down, k.Select, k.Back, k.Quit, k.Help}
