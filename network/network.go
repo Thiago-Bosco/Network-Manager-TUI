@@ -453,12 +453,14 @@ func ShowNetworkStatus(app *tview.Application) *tview.Flex {
         
         // Configurando ordem de foco
         flex.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
-                if event.Key() == tcell.KeyTab {
+                if event.Key() == tcell.KeyTab || event.Key() == tcell.KeyRight {
                         // Se estiver na tabela, move para os botões
                         if table.HasFocus() {
                                 app.SetFocus(buttonsForm)
                                 return nil
                         }
+                }
+                if event.Key() == tcell.KeyBacktab || event.Key() == tcell.KeyLeft {
                         // Se estiver nos botões, volta para a tabela
                         if buttonsForm.HasFocus() {
                                 app.SetFocus(table)
