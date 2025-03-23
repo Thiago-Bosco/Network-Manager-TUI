@@ -75,14 +75,9 @@ func main() {
         
         // Adiciona handler global para a tecla Esc retornar ao menu principal
         app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+                // Se pressionar Esc, volta para o menu principal
                 if event.Key() == tcell.KeyEscape {
-                        // Garante que o menu principal seja iniciado apenas uma vez
-                        go func() {
-                                time.Sleep(100 * time.Millisecond)
-                                app.QueueUpdateDraw(func() {
-                                        menu.StartMenu(app)
-                                })
-                        }()
+                        menu.StartMenu(app)
                         return nil
                 }
                 return event
@@ -93,31 +88,6 @@ func main() {
 
         // Inicia animação de título
         animateTitle(app, "Network Manager TUI")
-
-        // Desabilita combinações de teclas de sistema
-        app.EnableMouse(false)
-        app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
-                // Permite teclas de navegação e atalhos importantes
-                switch event.Key() {
-                case tcell.KeyEscape:
-                        // Volta ao menu principal
-                        app.QueueUpdateDraw(func() {
-                                menu.StartMenu(app)
-                        })
-                        return nil
-                case tcell.KeyTab:
-                        if event.Modifiers() == tcell.ModShift {
-                                // Shift+Tab: navegação reversa
-                                return tcell.NewEventKey(tcell.KeyBacktab, 0, tcell.ModNone)
-                        }
-                        // Tab: próximo elemento
-                        return event
-                case tcell.KeyBacktab:
-                        // Navegação reversa
-                        return event
-                }
-                return event
-        })
 
         // Inicia a aplicação
         if err := app.Run(); err != nil {
