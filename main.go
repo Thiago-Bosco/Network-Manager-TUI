@@ -75,9 +75,14 @@ func main() {
         
         // Adiciona handler global para a tecla Esc retornar ao menu principal
         app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
-                // Se pressionar Esc, volta para o menu principal
                 if event.Key() == tcell.KeyEscape {
-                        menu.StartMenu(app)
+                        // Garante que o menu principal seja iniciado apenas uma vez
+                        go func() {
+                                time.Sleep(100 * time.Millisecond)
+                                app.QueueUpdateDraw(func() {
+                                        menu.StartMenu(app)
+                                })
+                        }()
                         return nil
                 }
                 return event
