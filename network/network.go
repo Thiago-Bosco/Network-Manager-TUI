@@ -644,14 +644,15 @@ func ConfigureNetwork(app *tview.Application) *tview.Flex {
 
 // Função para aplicar as configurações de rede baseadas nas opções selecionadas
 func applyNetworkSettings(form *tview.Form) error {
-    // Obtém a interface selecionada
     interfaceIndex, _ := form.GetFormItemByLabel(i18n.T("network_interface")).(*tview.DropDown).GetCurrentOption()
     interfaces, _ := GetNetworkConnections()
     interfaceName := interfaces[interfaceIndex]
 
-    // Obtém o modo IPv4
+    // Obtém os modos IPv4 e IPv6
     ipv4Mode, _ := form.GetFormItemByLabel(i18n.T("network_ipv4_mode")).(*tview.DropDown).GetCurrentOption()
+    ipv6Mode, _ := form.GetFormItemByLabel(i18n.T("network_ipv6_mode")).(*tview.DropDown).GetCurrentOption()
 
+    // Configura IPv4
     if ipv4Mode == 1 { // Manual
         ip := form.GetFormItemByLabel(i18n.T("network_ipv4_address")).(*tview.InputField).GetText()
         netmask := form.GetFormItemByLabel(i18n.T("network_ipv4_netmask")).(*tview.InputField).GetText()
@@ -659,7 +660,14 @@ func applyNetworkSettings(form *tview.Form) error {
         dns1 := form.GetFormItemByLabel(i18n.T("network_ipv4_dns1")).(*tview.InputField).GetText()
         dns2 := form.GetFormItemByLabel(i18n.T("network_ipv4_dns2")).(*tview.InputField).GetText()
 
-        // Executa o comando nmcli para configuração manual
+        if !validateIPv4(ip) {
+            return fmt.Errorf("endereço IPv4 inválido: %s", ip)
+        }
+
+        if !validateNetmask(netmask) {
+            return fmt.Errorf("máscara de rede inválida: %s", netmask)
+        }
+
         cmd := exec.Command("nmcli", "connection", "modify", interfaceName,
             "ipv4.method", "manual",
             "ipv4.addresses", fmt.Sprintf("%s/%s", ip, netmask),
@@ -669,12 +677,55 @@ func applyNetworkSettings(form *tview.Form) error {
         if err := cmd.Run(); err != nil {
             return fmt.Errorf("erro ao configurar IPv4: %w", err)
         }
-
-        // Reativa a conexão para aplicar as mudanças
-        activateCmd := exec.Command("nmcli", "connection", "up", interfaceName)
-        if err := activateCmd.Run(); err != nil {
-            return fmt.Errorf("erro ao reativar conexão: %w", err)
+    } else {
+        // Modo automático (DHCP)
+        cmd := exec.Command("nmcli", "connection", "modify", interfaceName, "ipv4.method", "auto")
+        if err := cmd.Run(); err != nil {
+            return fmt.Errorf("erro ao configurar DHCP IPv4: %w", err)
         }
+    }
+
+    // Configura IPv6
+    if ipv6Mode == 1 { // Manual
+        ipv6 := form.GetFormItemByLabel(i18n.T("network_ipv6_address")).(*tview.InputField).GetText()
+        prefix := form.GetFormItemByLabel(i18n.T("network_ipv6_prefix")).(*tview.InputField).GetText()
+        gateway6 := form.GetFormItemByLabel(i18n.T("network_ipv6_gateway")).(*tview.InputField).GetText()
+        dns61 := form.GetFormItemByLabel(i18n.T("network_ipv6_dns1")).(*tview.InputField).GetText()
+        dns62 := form.GetFormItemByLabel(i18n.T("network_ipv6_dns2")).(*tview.InputField).GetText()
+
+        if !validateIPv6(ipv6) {
+            return fmt.Errorf("endereço IPv6 inválido: %s", ipv6)
+        }
+
+        if !validateIPv6Prefix(prefix) {
+            return fmt.Errorf("prefixo IPv6 inválido: %s", prefix)
+        }
+
+        cmd := exec.Command("nmcli", "connection", "modify", interfaceName,
+            "ipv6.method", "manual",
+            "ipv6.addresses", fmt.Sprintf("%s/%s", ipv6, prefix),
+            "ipv6.gateway", gateway6,
+            "ipv6.dns", fmt.Sprintf("%s,%s", dns61, dns62))
+
+        if err := cmd.Run(); err != nil {
+            return fmt.Errorf("erro ao configurar IPv6: %w", err)
+        }
+    } else if ipv6Mode == 2 { // Desabilitado
+        cmd := exec.Command("nmcli", "connection", "modify", interfaceName, "ipv6.method", "disabled")
+        if err := cmd.Run(); err != nil {
+            return fmt.Errorf("erro ao desabilitar IPv6: %w", err)
+        }
+    } else { // Automático
+        cmd := exec.Command("nmcli", "connection", "modify", interfaceName, "ipv6.method", "auto")
+        if err := cmd.Run(); err != nil {
+            return fmt.Errorf("erro ao configurar DHCP IPv6: %w", err)
+        }
+    }
+
+    // Reativa a conexão para aplicar todas as mudanças
+    activateCmd := exec.Command("nmcli", "connection", "up", interfaceName)
+    if err := activateCmd.Run(); err != nil {
+        return fmt.Errorf("erro ao reativar conexão: %w", err)
     }
 
     return nil
