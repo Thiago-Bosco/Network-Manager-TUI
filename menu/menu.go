@@ -163,22 +163,7 @@ func showSystemInfo(app *tview.Application) {
 		}
 	}()
 
-	// Configura navegação com Tab entre os botões
-	refreshButton.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
-		if event.Key() == tcell.KeyTab {
-			app.SetFocus(backButton)
-			return nil
-		}
-		return event
-	})
-
-	backButton.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
-		if event.Key() == tcell.KeyTab {
-			app.SetFocus(refreshButton)
-			return nil
-		}
-		return event
-	})
+	// Automatic refresh is now handled by the ticker
 }
 
 // Reinicia o sistema
