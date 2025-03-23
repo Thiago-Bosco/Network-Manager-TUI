@@ -93,7 +93,7 @@ func main() {
 	})
 
 	// Registra início da aplicação no histórico
-	history.AddAction("system", "app_start", "Aplicação iniciada")
+	history.AddAction("system", "app_start", "Aplicação iniciada", "", "system")
 	
 	// Inicia o menu principal
 	menu.StartMenu(app)
