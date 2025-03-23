@@ -11,6 +11,7 @@ import (
 	"time"
 	"networkmanager-tui/i18n"
 	"flag"
+	"os"
 )
 
 // Definição de cores utilizadas na interface - Paleta melhorada
@@ -334,14 +335,7 @@ func ShowNetworkStatus(app *tview.Application) *tview.Flex {
 		table.SetCell(1, 7, tview.NewTableCell("").SetSelectable(false))
 
 		// Em desenvolvimento simulamos dados para testes
-		devMode := false
-		flag.Visit(func(f *flag.Flag) {
-			if f.Name == "dev" && f.Value.String() == "true" {
-				devMode = true
-			}
-		})
-
-		if devMode {
+		if os.Getenv("DEV_MODE") == "true" {
 			// Gera dados simulados para testes
 			connections = []NetworkConnectionInfo{
 				{
@@ -612,12 +606,9 @@ func ConfigureNetwork(app *tview.Application) *tview.Flex {
 	ipv6DNS2Input.SetDisabled(true)
 
 	// Verificamos se estamos no modo de desenvolvimento
-	devMode := false
-	flag.Visit(func(f *flag.Flag) {
-		if f.Name == "dev" && f.Value.String() == "true" {
-			devMode = true
-		}
-	})
+	if os.Getenv("DEV_MODE") == "true" {
+
+	}
 
 	// Botões
 	form.AddButton(i18n.T("network_save"), func() {
