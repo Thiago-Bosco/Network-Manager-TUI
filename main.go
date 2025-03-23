@@ -108,16 +108,13 @@ func main() {
                 case tcell.KeyTab:
                         if event.Modifiers() == tcell.ModShift {
                                 // Shift+Tab: navegação reversa
-                                app.SetFocus(app.GetFocus().InputHandler()(tview.NewEventKey(tcell.KeyBacktab, 0, 0)))
-                                return nil
+                                return tcell.NewEventKey(tcell.KeyBacktab, 0, tcell.ModNone)
                         }
                         // Tab: próximo elemento
-                        app.SetFocus(app.GetFocus().InputHandler()(event))
-                        return nil
+                        return event
                 case tcell.KeyBacktab:
                         // Navegação reversa
-                        app.SetFocus(app.GetFocus().InputHandler()(event))
-                        return nil
+                        return event
                 }
                 return event
         })
