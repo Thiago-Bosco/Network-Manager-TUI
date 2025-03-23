@@ -644,7 +644,13 @@ func ConfigureNetwork(app *tview.Application) *tview.Flex {
 // Função para aplicar as configurações de rede baseadas nas opções selecionadas
 func applyNetworkSettings(form *tview.Form) error {
     interfaceIndex, _ := form.GetFormItemByLabel(i18n.T("network_interface")).(*tview.DropDown).GetCurrentOption()
-    interfaces, _ := GetNetworkConnections()
+    interfaces, err := GetNetworkConnections()
+    if err != nil {
+        return fmt.Errorf("erro ao obter interfaces: %w", err)
+    }
+    if interfaceIndex >= len(interfaces) {
+        return fmt.Errorf("interface selecionada inválida")
+    }
     interfaceName := interfaces[interfaceIndex]
 
     // Obtém os modos IPv4 e IPv6
@@ -740,8 +746,13 @@ func applyNetworkSettings(form *tview.Form) error {
 
     // Reativa a conexão para aplicar todas as mudanças
     activateCmd := exec.Command("nmcli", "connection", "up", interfaceName)
-    if err := activateCmd.Run(); err != nil {
-        return fmt.Errorf("erro ao reativar conexão: %w", err)
+    if output, err := activateCmd.CombinedOutput(); err != nil {
+        return fmt.Errorf("erro ao reativar conexão: %v (saída: %s)", err, string(output))
+    }
+
+    // Verifica se a interface está ativa
+    if _, err := GetActiveConnection(); err != nil {
+        return fmt.Errorf("erro ao verificar status da conexão após ativação: %w", err)
     }
 
     return nil
