@@ -1,121 +1,151 @@
 
-# Diagrama do Network Manager TUI
+# Diagrama Técnico - Network Manager TUI
 
 ```mermaid
 graph TD
-    %% Componente Principal
-    A[main.go] --> B[Menu Principal]
-    A --> C[Sistema de Idiomas]
-    A --> D[Sistema de Logs]
+    %% Core Application
+    A[main.go] --> B[cmd/root.go]
+    B --> C[internal/ui/app.go]
     
-    %% Menu e Navegação
-    B --> E[Gerenciamento de Rede]
-    B --> F[Status do Sistema]
-    B --> G[Teste de Conexão]
-    B --> H[Informações]
-    B --> I[Ajuda]
-    B --> J[Reiniciar]
-    B --> K[Desligar]
-    
-    %% Gerenciamento de Rede
-    E --> L[Configuração IPv4]
-    E --> M[Configuração IPv6]
-    E --> N[DHCP]
-    E --> O[DNS]
-    E --> P[Interfaces]
-    
-    %% Status e Monitoramento
-    F --> Q[Status da Rede]
-    F --> R[Conexões Ativas]
-    F --> S[Interfaces de Rede]
-    
-    %% Segurança
-    T[Sistema de Segurança] --> U[Verificação Root]
-    T --> V[Validação de Entrada]
-    T --> W[Modo Desenvolvimento]
-    T --> X[Proteção Comandos]
-    
-    %% Logs e História
-    D --> Y[Logs do Sistema]
-    D --> Z[Histórico de Ações]
-    D --> AA[Limpeza Automática]
-    
-    %% Interface do Usuário
-    AB[Interface TUI] --> AC[Temas]
-    AB --> AD[Navegação]
-    AB --> AE[Feedback Visual]
-    AB --> AF[Atalhos]
+    %% Packages & Dependencies
+    D[Packages] --> D1[github.com/charmbracelet/bubbletea]
+    D --> D2[github.com/charmbracelet/lipgloss]
+    D --> D3[github.com/gdamore/tcell/v2]
+    D --> D4[github.com/rivo/tview]
 
-    %% Subgráfico de Componentes
-    subgraph Componentes_Principais
+    %% Core Components
+    C --> E[menu/menu.go]
+    C --> F[network/network.go]
+    C --> G[logger/logger.go]
+    C --> H[i18n/i18n.go]
+
+    %% Network Management
+    F --> F1[NetworkManager CLI]
+    F --> F2[System Commands]
+    F --> F3[Network Interfaces]
+    F --> F4[Connection Manager]
+
+    %% System Components
+    I[System] --> I1[Privilege Handler]
+    I --> I2[Process Manager]
+    I --> I3[System Info]
+    I --> I4[Hardware Info]
+
+    %% Data Flow
+    J[Data Flow] --> J1[User Input]
+    J --> J2[System Events]
+    J --> J3[Network Events]
+    J --> J4[Error Handling]
+
+    %% Development Tools
+    K[Dev Tools] --> K1[Debug Mode]
+    K --> K2[Test Environment]
+    K --> K3[Mock Data]
+    K --> K4[Performance Monitoring]
+
+    %% Security Layer
+    L[Security] --> L1[Root Check]
+    L --> L2[Command Validation]
+    L --> L3[Input Sanitization]
+    L --> L4[Error Recovery]
+
+    %% UI Components
+    M[UI Layer] --> M1[TUI Components]
+    M --> M2[Event Handlers]
+    M --> M3[State Management]
+    M --> M4[Render Pipeline]
+
+    subgraph Core_Architecture
         A
         B
         C
         D
-        T
     end
 
-    %% Subgráfico de Interface
-    subgraph Interface_Usuario
-        AB
-        AC
-        AD
-        AE
-        AF
-    end
-
-    %% Subgráfico de Funcionalidades
-    subgraph Funcionalidades
-        E
+    subgraph Technical_Components
         F
         G
         H
+        I
     end
+
+    subgraph Development_Layer
+        K
+        L
+        M
+    end
+
+    %% Integrations
+    N[External] --> N1[Network Stack]
+    N --> N2[System APIs]
+    N --> N3[Hardware Interface]
 ```
 
-## Descrição da Arquitetura
+## Detalhes Técnicos
 
-### 1. Componentes Principais
-- **main.go**: Ponto de entrada da aplicação
-- **Menu Principal**: Interface central de navegação
-- **Sistema de Idiomas**: Suporte a múltiplos idiomas
-- **Sistema de Logs**: Registro de atividades
-- **Sistema de Segurança**: Proteção e validação
+### Estrutura de Arquivos
+```
+├── main.go                 # Entry point
+├── cmd/
+│   └── root.go            # Command initialization
+├── internal/
+│   ├── ui/                # Interface components
+│   ├── network/           # Network operations
+│   └── utils/             # Utilities
+├── logger/                # Logging system
+└── i18n/                  # Internationalization
+```
 
-### 2. Gerenciamento de Rede
-- Configuração completa de rede IPv4/IPv6
-- Suporte a DHCP e DNS
-- Gerenciamento de interfaces de rede
-- Monitoramento de conexões ativas
+### Componentes Principais
+1. **Core (main.go)**
+   - Inicialização da aplicação
+   - Gestão de estados
+   - Roteamento principal
 
-### 3. Segurança
-- Verificação de privilégios root
-- Validação de entrada de dados
-- Modo de desenvolvimento seguro
-- Proteção contra comandos perigosos
-- Histórico de alterações
+2. **UI (internal/ui/)**
+   - Renderização TUI
+   - Gerenciamento de eventos
+   - Componentes visuais
 
-### 4. Monitoramento
-- Status da rede em tempo real
-- Informações do sistema
-- Teste de conectividade
-- Monitoramento de recursos
+3. **Network (network/)**
+   - Interface com NetworkManager
+   - Configuração de rede
+   - Monitoramento
 
-### 5. Interface do Usuário
-- Temas personalizados
-- Navegação intuitiva
-- Feedback visual
-- Atalhos de teclado
-- Suporte a múltiplos idiomas
+4. **Logger (logger/)**
+   - Sistema de logs
+   - Rotação de arquivos
+   - Debug mode
 
-### 6. Sistema de Logs
-- Registro detalhado de ações
-- Histórico de modificações
-- Limpeza automática após 90 dias
-- Exportação de logs
+### Desenvolvimento
+1. **Debug Mode**
+   - Flag `-dev`
+   - Mock data
+   - Bypass root check
 
-### 7. Recursos Adicionais
-- Reinicialização segura
-- Desligamento controlado
-- Sistema de ajuda integrado
-- Backup de configurações
+2. **Testing**
+   - Unit tests
+   - Integration tests
+   - Mock interfaces
+
+3. **Performance**
+   - Event profiling
+   - Memory tracking
+   - UI optimization
+
+### Dependências
+- bubbletea: Framework TUI
+- lipgloss: Estilização
+- tcell: Terminal UI
+- tview: Componentes visuais
+
+### Segurança
+1. **Validações**
+   - Input sanitization
+   - Command validation
+   - Error handling
+
+2. **Privilégios**
+   - Root check
+   - Permission validation
+   - Safe mode
