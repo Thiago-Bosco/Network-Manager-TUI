@@ -92,14 +92,14 @@ type App struct {
 	header  components.Header
 	footer  components.Footer
 	help    help.Model
-	
+
 	// Pages
 	mainMenu           pages.MainMenu
 	editConnection     pages.EditConnection
 	addConnection      pages.AddConnection
 	wifiList           pages.WiFiList
 	activateConnection pages.ActivateConnection
-	
+
 	currentPage Page
 	showHelp    bool
 	width       int
@@ -116,13 +116,13 @@ func NewApp() *App {
 		header:  components.NewHeader(),
 		footer:  components.NewFooter(),
 		help:    helpModel,
-		
+
 		mainMenu:           pages.NewMainMenu(),
 		editConnection:     pages.NewEditConnection(),
 		addConnection:      pages.NewAddConnection(),
 		wifiList:           pages.NewWiFiList(),
 		activateConnection: pages.NewActivateConnection(),
-		
+
 		currentPage: MainMenuPage,
 		showHelp:    false,
 	}
@@ -179,6 +179,9 @@ func (a App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		a.addConnection.SetSize(msg.Width, contentHeight)
 		a.wifiList.SetSize(msg.Width, contentHeight)
 		a.activateConnection.SetSize(msg.Width, contentHeight)
+	case tea.MouseMsg:
+		return a, nil // Ignore all mouse events
+
 	}
 
 	// Handle page-specific updates
